@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Training Manager"/>
+<meta name="theme-color" content="#0B0E1A"/>
+<title>Training Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0B0E1A;--bg2:#0F1422;
+  --surface:rgba(255,255,255,0.045);--surface2:rgba(255,255,255,0.085);--surface3:rgba(255,255,255,0.13);
+  --teal:#38BDF8;--teal-l:#7DDBFC;--teal-d:#0369A1;--teal-glow:rgba(56,189,248,0.3);--teal-bg:rgba(56,189,248,0.1);
+  --green:#22C55E;--green-l:#4ADE80;--green-glow:rgba(34,197,94,0.32);
+  --purple:#A78BFA;--orange:#F97316;
+  --text:#E8EAF6;--muted:rgba(232,234,246,0.42);--muted2:rgba(232,234,246,0.22);
+  --border:rgba(56,189,248,0.22);--border-l:rgba(255,255,255,0.065);
+  --r:14px;--r-sm:9px;
+}
+html{background:var(--bg);}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;overscroll-behavior:none;}
+#root{display:flex;flex-direction:column;min-height:100svh;}
+
+/* App shell */
+.app{max-width:480px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;background:linear-gradient(160deg,#111827 0%,var(--bg) 60%);position:relative;overflow:hidden;}
+.orb1{position:fixed;top:-100px;right:-70px;width:320px;height:320px;background:radial-gradient(circle,rgba(56,189,248,0.1) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.orb2{position:fixed;bottom:30px;left:-110px;width:360px;height:360px;background:radial-gradient(circle,rgba(167,139,250,0.07) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.screen{flex:1;overflow-y:auto;padding-bottom:96px;position:relative;z-index:1;}
+.screen-inner{padding-bottom:24px;}
+
+/* Header */
+.hdr{display:flex;align-items:center;gap:12px;padding:52px 20px 14px;position:relative;z-index:2;}
+.hdr-logo{font-size:28px;line-height:1;flex-shrink:0;}
+.hdr-titles{flex:1;min-width:0;}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,var(--teal-l),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.hdr-sub{font-size:11px;color:var(--muted);letter-spacing:0.3px;margin-top:1px;}
+.btn-back{width:38px;height:38px;border-radius:11px;background:var(--surface);border:1px solid var(--border-l);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.2s;flex-shrink:0;}
+.btn-back:hover{background:var(--surface2);border-color:var(--border);}
+
+/* Section labels */
+.sect{padding:0 20px;margin-bottom:20px;}
+.sect-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:11px;display:flex;align-items:center;gap:10px;}
+.sect-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:16px;transition:all 0.18s;}
+.card+.card{margin-top:10px;}
+.card:hover{background:var(--surface2);}
+.card-clickable{cursor:pointer;}
+.card-clickable:hover{border-color:rgba(56,189,248,0.35);transform:translateX(2px);}
+.team-card{display:flex;align-items:center;gap:14px;}
+.team-badge{width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,rgba(56,189,248,0.18),rgba(167,139,250,0.1));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--teal);flex-shrink:0;}
+.team-info{flex:1;min-width:0;}
+.team-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.team-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+.team-count{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--teal);line-height:1;text-align:center;}
+.team-count-lbl{font-size:9px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;text-align:center;}
+.team-arr{color:var(--muted);font-size:18px;}
+
+/* Import / Export */
+.action-row{display:flex;gap:10px;padding:0 20px;margin-bottom:22px;}
+.action-btn{flex:1;display:flex;align-items:center;gap:10px;padding:13px 14px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);cursor:pointer;transition:all 0.2s;color:var(--text);}
+.action-btn:hover{background:var(--surface2);border-color:var(--border);}
+.action-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.action-icon{font-size:20px;flex-shrink:0;}
+.action-lbl{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;}
+.action-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* Buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;transition:all 0.2s;}
+.btn-primary{background:linear-gradient(135deg,var(--teal-l),var(--teal-d));color:#fff;box-shadow:0 4px 18px var(--teal-glow);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(56,189,248,0.45);}
+.btn-primary:active{transform:translateY(0);}
+.btn-saved{background:linear-gradient(135deg,var(--green-l),#15803D);color:#fff;box-shadow:0 4px 18px var(--green-glow);}
+.btn-saved:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(34,197,94,0.45);}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border-l);}
+.btn-secondary:hover{background:var(--surface3);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid transparent;font-size:13px;height:36px;}
+.btn-ghost:hover{color:var(--text);background:var(--surface);border-color:var(--border-l);}
+.btn-row{display:flex;gap:10px;}
+.btn-row .btn{flex:1;}
+
+/* Hero */
+.hero{padding:4px 20px 22px;}
+.hero-greeting{font-size:13px;color:var(--muted);margin-bottom:3px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;letter-spacing:0.3px;line-height:1.05;}
+.hero-teal{color:var(--teal);}
+
+/* Date row */
+.date-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);margin:0 20px 18px;}
+.date-icon{font-size:17px;}
+.date-lbl{font-size:13px;color:var(--muted);font-weight:500;}
+input[type='date']{background:none;border:none;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-left:auto;color-scheme:dark;outline:none;}
+
+/* Attendance stats */
+.att-stats{display:flex;gap:10px;padding:0 20px;margin-bottom:18px;}
+.att-stat{flex:1;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);padding:12px 8px;text-align:center;}
+.att-num{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--teal);line-height:1;}
+.att-num.absent{color:var(--muted);}
+.att-num.total{color:var(--purple);}
+.att-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+
+/* Player roll-call rows */
+.player-row{display:flex;align-items:center;gap:14px;padding:11px 14px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;margin-bottom:7px;}
+.player-row.present{border-color:rgba(56,189,248,0.32);background:rgba(56,189,248,0.06);}
+.player-row.absent{opacity:0.38;}
+.player-row:hover{background:var(--surface2);}
+.player-row.present:hover{background:rgba(56,189,248,0.1);}
+.p-num{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--teal);width:34px;text-align:center;flex-shrink:0;line-height:1;}
+.p-info{flex:1;min-width:0;}
+.p-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-meta{font-size:11px;color:var(--muted);display:flex;gap:8px;margin-top:2px;flex-wrap:wrap;}
+.p-check{width:24px;height:24px;border-radius:7px;border:2px solid rgba(56,189,248,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.player-row.present .p-check{background:var(--teal);border-color:var(--teal);}
+.check-tick{font-size:13px;color:#071828;font-weight:900;}
+
+/* Bottom nav */
+.bot-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:rgba(11,14,26,0.93);backdrop-filter:blur(24px) saturate(1.5);border-top:1px solid var(--border-l);z-index:100;padding:8px 0 max(10px,env(safe-area-inset-bottom));}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;background:none;border:none;cursor:pointer;color:var(--muted2);transition:color 0.2s;}
+.nav-btn.active{color:var(--teal);}
+.nav-icon{font-size:21px;}
+.nav-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
+
+/* Toast */
+.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:rgba(15,20,34,0.97);border:1px solid var(--border);border-radius:22px;padding:10px 22px;font-size:14px;font-weight:500;backdrop-filter:blur(12px);z-index:9999;white-space:nowrap;animation:toastIn 0.25s ease;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+
+/* Group config rows */
+.cfg-section{padding:0 20px;margin-bottom:20px;}
+.cfg-row-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:14px;}
+.cfg-row-label:first-child{margin-top:0;}
+.cfg-row{display:flex;gap:8px;margin-bottom:0;}
+.cfg-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;color:var(--muted);}
+.cfg-btn:hover{background:var(--surface2);color:var(--text);}
+.cfg-btn.active{background:var(--teal-bg);border-color:rgba(56,189,248,0.52);color:var(--text);}
+.cfg-num{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;line-height:1;transition:color 0.15s;}
+.cfg-btn.active .cfg-num{color:var(--teal);}
+.cfg-sub{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;margin-top:3px;font-weight:600;}
+
+/* Mode icon cards — 5 across */
+.mode-row{display:flex;gap:6px;padding:0 20px;margin-bottom:20px;}
+.mode-card{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 2px 8px;background:var(--surface);border:1.5px solid var(--border-l);border-radius:12px;cursor:pointer;transition:all 0.15s;min-width:0;overflow:hidden;}
+.mode-card:hover{background:var(--surface2);}
+.mode-card.active{background:var(--teal-bg);border-color:rgba(56,189,248,0.5);box-shadow:0 0 14px rgba(56,189,248,0.13);}
+.mode-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;color:var(--muted);width:100%;text-align:center;padding:0 2px;}
+.mode-card.active .mode-lbl{color:var(--teal);}
+
+/* Generate */
+.gen-section{padding:0 20px;margin-bottom:22px;}
+.gen-empty{display:flex;flex-direction:column;align-items:center;padding:44px 24px;text-align:center;gap:10px;}
+.gen-empty-icon{font-size:46px;opacity:0.38;}
+.gen-empty-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--muted);}
+.gen-empty-sub{font-size:13px;color:var(--muted2);line-height:1.55;}
+
+/* Group result cards */
+.groups-list{padding:0 20px;display:flex;flex-direction:column;gap:11px;margin-bottom:10px;}
+.group-card{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);overflow:hidden;animation:slideUp 0.3s ease both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.group-hdr{display:flex;align-items:center;gap:10px;padding:9px 14px;background:rgba(0,0,0,0.18);border-bottom:1px solid var(--border-l);}
+.group-num{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
+.group-sz{font-size:11px;color:var(--muted);margin-left:auto;}
+.group-players{display:flex;flex-wrap:wrap;gap:7px;padding:12px 14px;}
+.p-chip{display:flex;align-items:center;gap:6px;padding:6px 10px 6px 8px;border-radius:20px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.07);}
+.chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.chip-num{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--muted);}
+.chip-name{font-size:13px;font-weight:600;}
+.chip-pos{font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:0.5px;color:var(--muted);background:rgba(255,255,255,0.06);padding:2px 5px;border-radius:4px;}
+
+/* History */
+.hist-card{display:flex;align-items:center;gap:14px;}
+.hist-date-box{text-align:center;background:rgba(56,189,248,0.09);border:1px solid rgba(56,189,248,0.25);border-radius:11px;padding:8px 12px;min-width:54px;flex-shrink:0;}
+.h-day{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--teal);line-height:1;}
+.h-month{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.hist-detail{flex:1;min-width:0;}
+.hist-wd{font-size:13px;color:var(--muted);margin-bottom:2px;}
+.hist-names{font-size:12px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-count{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--teal);text-align:center;flex-shrink:0;line-height:1;}
+.hist-count-lbl{font-size:9px;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* Empty state */
+.empty{text-align:center;padding:52px 24px;}
+.empty-icon{font-size:48px;margin-bottom:14px;}
+.empty-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;}
+.empty-desc{font-size:14px;color:var(--muted);line-height:1.6;}
+
+/* Modal sheet */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:flex-end;}
+.modal-sheet{width:100%;max-width:480px;margin:0 auto;background:#0F1422;border-radius:22px 22px 0 0;border-top:1px solid var(--border);padding:20px 20px max(20px,env(safe-area-inset-bottom));max-height:88svh;overflow-y:auto;animation:sheetUp 0.3s ease;}
+@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,0.12);border-radius:2px;margin:0 auto 20px;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;margin-bottom:20px;}
+.form-grp{margin-bottom:14px;}
+.form-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px;display:block;}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);padding:11px 14px;color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:rgba(56,189,248,0.5);}
+.form-input::placeholder{color:var(--muted2);}
+.form-row{display:flex;gap:10px;}
+.form-row .form-grp{flex:1;}
+.players-mini{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.mini-chip{display:flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border-l);border-radius:20px;padding:4px 10px 4px 8px;font-size:12px;cursor:pointer;}
+.mini-chip:hover{background:rgba(244,114,182,0.15);border-color:rgba(244,114,182,0.4);}
+.mini-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--teal);font-size:11px;}
+.divider{height:1px;background:var(--border-l);margin:0 0 16px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ── Constants ──────────────────────────────────────────────────────────────────
+const POSITIONS = { 0:"—",1:"PG",2:"SG",3:"SF",4:"PF",5:"C" };
+const SKILL_KEYS = [
+  "speed","energy","layup","jumpshot","three","foulshot",
+  "passing","receiving","dribble","dribblepressure","sharing",
+  "defplayer","defset","offdef","reboff","rebdef","setplays","composure",
+];
+const MODES = [
+  { id:"random",   label:"Random"  },
+  { id:"samePos",  label:"Same Pos"},
+  { id:"diffPos",  label:"Vary Pos"},
+  { id:"sameSkill",label:"Similar" },
+  { id:"mixSkill", label:"Mixed"   },
+];
+const ALL_CONFIGS = [
+  { id:"all2", label:"Pairs", sub:"×2", full:"Groups of 2", size:2 },
+  { id:"all3", label:"Trios", sub:"×3", full:"Groups of 3", size:3 },
+  { id:"all4", label:"Fours", sub:"×4", full:"Groups of 4", size:4 },
+];
+const ONE_CONFIGS = [
+  { id:"one2", label:"2", sub:"pair",  full:"One Pair",   size:2 },
+  { id:"one3", label:"3", sub:"trio",  full:"One Trio",   size:3 },
+  { id:"one4", label:"4", sub:"group", full:"Group of 4", size:4 },
+  { id:"one5", label:"5", sub:"group", full:"Group of 5", size:5 },
+  { id:"one6", label:"6", sub:"group", full:"Group of 6", size:6 },
+];
+const ALL_CFGS = [...ALL_CONFIGS, ...ONE_CONFIGS];
+const CHIP_COLORS = ["#38BDF8","#A78BFA","#34D399","#F472B6","#FBBF24","#60A5FA","#4ADE80","#FB923C","#E879F9","#2DD4BF"];
+const GROUP_COLORS = ["rgba(56,189,248,0.9)","rgba(167,139,250,0.9)","rgba(52,211,153,0.9)","rgba(244,114,182,0.9)","rgba(251,191,36,0.9)","rgba(45,212,191,0.9)"];
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function uid() { return Math.random().toString(36).slice(2,10); }
+function todayStr() { return new Date().toISOString().split("T")[0]; }
+function calcOverall(r) {
+  if (!r) return null;
+  const vals = SKILL_KEYS.map(k => r[k]).filter(v => typeof v === "number");
+  return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : null;
+}
+function divideAll(arr, size) {
+  if (!arr.length) return [];
+  const a=[...arr], groups=[];
+  if (size===2) {
+    while (a.length) {
+      if (a.length===1){ groups.length ? groups[groups.length-1].push(a.pop()) : groups.push(a.splice(0)); break; }
+      if (a.length===3){ groups.push(a.splice(0,3)); break; }
+      groups.push(a.splice(0,2));
+    }
+  } else if (size===3) {
+    const rem=a.length%3;
+    if (rem===1&&a.length>=4) groups.push(a.splice(0,4));
+    else if (rem===2) groups.push(a.splice(0,2));
+    while (a.length>=3) groups.push(a.splice(0,3));
+    if (a.length) groups.push(a.splice(0));
+  } else if (size===4) {
+    const rem=a.length%4;
+    if (rem===1&&a.length>=5) groups.push(a.splice(0,5));
+    else if (rem===2&&a.length>=6){ groups.push(a.splice(0,3)); groups.push(a.splice(0,3)); }
+    else if (rem===3) groups.push(a.splice(0,3));
+    while (a.length>=4) groups.push(a.splice(0,4));
+    if (a.length) groups.push(a.splice(0));
+  }
+  return groups.filter(g=>g.length);
+}
+function arrangePlayers(players, mode, ratings, teamId) {
+  const r  = p => ratings?.[`${teamId}_${p.id}`];
+  const pos = p => r(p)?.position||0;
+  const skill = p => calcOverall(r(p))??5;
+  const arr=[...players];
+  switch(mode){
+    case "random":    return arr.sort(()=>Math.random()-0.5);
+    case "samePos":   return arr.sort((a,b)=>pos(a)-pos(b));
+    case "sameSkill": return arr.sort((a,b)=>skill(a)-skill(b));
+    case "diffPos": {
+      const byPos={};
+      arr.forEach(p=>{ const k=pos(p); (byPos[k]=byPos[k]||[]).push(p); });
+      Object.values(byPos).forEach(g=>g.sort(()=>Math.random()-0.5));
+      const keys=Object.keys(byPos).sort(), result=[];
+      let i=0, added=true;
+      while(result.length<arr.length&&added){ added=false; for(const k of keys){ if(i<byPos[k].length){ result.push(byPos[k][i]); added=true; } } i++; }
+      return result;
+    }
+    case "mixSkill": {
+      arr.sort((a,b)=>skill(b)-skill(a));
+      const result=[]; let lo=arr.length-1, hi=0;
+      while(hi<=lo){ result.push(arr[hi++]); if(hi<=lo) result.push(arr[lo--]); }
+      return result;
+    }
+    default: return arr;
+  }
+}
+function makeGroups(players, config, mode, ratings, teamId) {
+  const arranged=arrangePlayers(players, mode, ratings, teamId);
+  if(config.startsWith("one")) return [arranged.slice(0, Math.min(parseInt(config.replace("one","")), arranged.length))];
+  return divideAll(arranged, parseInt(config.replace("all","")));
+}
+
+// ── Storage (localStorage) ─────────────────────────────────────────────────────
+const LS = {
+  get: k => { try{ const v=localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch{ return null; } },
+  set: (k,v) => { try{ localStorage.setItem(k,JSON.stringify(v)); } catch{} },
+};
+
+// ── Mode SVG Icons ─────────────────────────────────────────────────────────────
+function IcoRandom() {
+  return (
+    <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+      <circle cx="24" cy="24" r="22" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.28)" strokeWidth="1.2"/>
+      <circle cx="24" cy="30" r="8.5" fill="none" stroke="rgba(251,146,60,0.75)" strokeWidth="1.4"/>
+      <path d="M15.8 30 Q24 25.5 32.2 30" stroke="rgba(251,146,60,0.55)" strokeWidth="1" fill="none"/>
+      <line x1="24" y1="21.5" x2="24" y2="38.5" stroke="rgba(251,146,60,0.45)" strokeWidth="1"/>
+      <text x="8"  y="21" fontSize="13" fill="#38BDF8" fontWeight="900" opacity="0.95">?</text>
+      <text x="31" y="16" fontSize="9"  fill="#A78BFA" opacity="0.85">3</text>
+      <text x="34" y="27" fontSize="11" fill="#38BDF8" opacity="0.7">?</text>
+      <text x="14" y="13" fontSize="8"  fill="#2DD4BF" opacity="0.65">?</text>
+    </svg>
+  );
+}
+function IcoSamePos() {
+  return (
+    <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+      <circle cx="24" cy="24" r="22" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.28)" strokeWidth="1.2"/>
+      <rect x="10" y="10" width="28" height="24" rx="2" fill="none" stroke="rgba(56,189,248,0.2)" strokeWidth="0.8"/>
+      <path d="M10 26 Q24 20 38 26" fill="none" stroke="rgba(56,189,248,0.15)" strokeWidth="0.7"/>
+      {[11,18,25,32].map((x,i) => (
+        <g key={i} transform={`translate(${x},27)`}>
+          <circle cx="3" cy="0" r="3.8" fill="#38BDF8" opacity="0.85"/>
+          <rect x="0.5" y="5" width="5" height="7" rx="1.5" fill="#38BDF8" opacity="0.6"/>
+          <text x="-0.5" y="2.5" fontSize="3.8" fill="#071828" fontWeight="900">PG</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+function IcoVaryPos() {
+  return (
+    <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+      <circle cx="24" cy="24" r="22" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.28)" strokeWidth="1.2"/>
+      <rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="rgba(167,139,250,0.18)" strokeWidth="0.8"/>
+      <line x1="24" y1="10" x2="24" y2="38" stroke="rgba(167,139,250,0.1)" strokeWidth="0.6"/>
+      <g transform="translate(13,30)"><circle cx="0" cy="0" r="4.5" fill="#A78BFA" opacity="0.9"/><text x="-3" y="1.8" fontSize="4.5" fill="#0a0a1e" fontWeight="900">G</text></g>
+      <g transform="translate(24,22)"><circle cx="0" cy="0" r="4"   fill="#38BDF8" opacity="0.9"/><text x="-3" y="1.5" fontSize="4"   fill="#0a0a1e" fontWeight="900">W</text></g>
+      <g transform="translate(35,13)"><circle cx="0" cy="0" r="4"   fill="#34D399" opacity="0.9"/><text x="-2.5" y="1.5" fontSize="4" fill="#0a0a1e" fontWeight="900">C</text></g>
+      <g transform="translate(15,14)"><circle cx="0" cy="0" r="3.8" fill="#F472B6" opacity="0.9"/><text x="-2.5" y="1.5" fontSize="4" fill="#0a0a1e" fontWeight="900">F</text></g>
+      <circle cx="26" cy="34" r="3.5" fill="none" stroke="rgba(251,146,60,0.65)" strokeWidth="1.2"/>
+    </svg>
+  );
+}
+function IcoSimilar() {
+  return (
+    <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+      <circle cx="24" cy="24" r="22" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.28)" strokeWidth="1.2"/>
+      <rect x="10" y="13" width="28" height="22" rx="2" fill="none" stroke="rgba(251,191,36,0.18)" strokeWidth="0.7"/>
+      <text x="9"  y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text>
+      <text x="19" y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text>
+      <text x="29" y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text>
+      {[13,22,31].map((x,i) => (
+        <g key={i} transform={`translate(${x},30)`}>
+          <circle cx="3" cy="0" r="3.5" fill="#FBBF24" opacity="0.8"/>
+          <rect x="0.5" y="5" width="5" height="7" rx="1.5" fill="#FBBF24" opacity="0.6"/>
+        </g>
+      ))}
+      <text x="20" y="16" fontSize="10" opacity="0.8">🔥</text>
+    </svg>
+  );
+}
+function IcoMixed() {
+  return (
+    <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+      <circle cx="24" cy="24" r="22" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.28)" strokeWidth="1.2"/>
+      <circle cx="14" cy="20" r="6.5" fill="#34D399" opacity="0.9"/>
+      <rect x="8.5" y="28" width="11" height="12" rx="2" fill="#34D399" opacity="0.75"/>
+      <circle cx="33" cy="23" r="4.5" fill="#38BDF8" opacity="0.8"/>
+      <rect x="28.5" y="29" width="9" height="10" rx="1.5" fill="#38BDF8" opacity="0.65"/>
+      <path d="M21.5 23.5 C23 20.5 26.5 20.5 28.5 22.5" stroke="rgba(255,255,255,0.38)" strokeWidth="1.5" fill="none" strokeDasharray="2 1.5"/>
+      <text x="19"   y="16" fontSize="9" fill="#FBBF24" opacity="0.9">↑</text>
+      <text x="34.5" y="16" fontSize="9" fill="#60A5FA" opacity="0.75">↓</text>
+    </svg>
+  );
+}
+const MODE_ICONS = { random:IcoRandom, samePos:IcoSamePos, diffPos:IcoVaryPos, sameSkill:IcoSimilar, mixSkill:IcoMixed };
+
+// ── App ────────────────────────────────────────────────────────────────────────
+function TrainingManager() {
+  const [tab, setTab]             = useState("teams");
+  const [screen, setScreen]       = useState("home");
+  const [teams, setTeams]         = useState(() => LS.get("tm_teams") || []);
+  const [ratings, setRatings]     = useState(() => LS.get("tm_ratings") || {});
+  const [sessions, setSessions]   = useState(() => LS.get("tm_sessions") || {});
+  const [selTeam, setSelTeam]     = useState(null);
+  const [sessionDate, setSessionDate] = useState(todayStr());
+  const [attendees, setAttendees] = useState(new Set());
+  const [isSaved, setIsSaved]     = useState(false);
+  const [groups, setGroups]       = useState([]);
+  const [groupConfig, setGroupConfig] = useState("all2");
+  const [groupMode, setGroupMode] = useState("random");
+  const [toast, setToast]         = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [newTeam, setNewTeam]     = useState({ club:"",league:"",season:"",ageBracket:"",year:String(new Date().getFullYear()),players:[] });
+  const [npName, setNpName]       = useState("");
+  const [npNum, setNpNum]         = useState("");
+  const importRef   = useRef(null);
+  const groupsRef   = useRef(null);
+
+  // Persist helpers
+  const saveTeams    = t => { setTeams(t);    LS.set("tm_teams",t); };
+  const saveRatings  = r => { setRatings(r);  LS.set("tm_ratings",r); };
+  const saveSessions = s => { setSessions(s); LS.set("tm_sessions",s); };
+  const showToast = msg => { setToast(msg); setTimeout(()=>setToast(null),3000); };
+
+  // ── Import ──
+  function onImport(e) {
+    const f=e.target.files[0]; if(!f) return; e.target.value="";
+    const fr=new FileReader();
+    fr.onload = ev => {
+      try {
+        const data=JSON.parse(ev.target.result);
+        if(!data._squadmgr) throw new Error();
+        const next=[...teams];
+        for(const team of (data.teams||[])){ const i=next.findIndex(t=>t.id===team.id); if(i>=0) next[i]=team; else next.push(team); }
+        saveTeams(next);
+        if(data.ratings) saveRatings({...ratings,...data.ratings});
+        showToast(`✓ Imported ${data.teams?.length||0} team(s)`);
+      } catch { showToast("⚠ Invalid Squad Manager file"); }
+    };
+    fr.readAsText(f);
+  }
+
+  // ── Export ──
+  function onExport() {
+    const data={_squadmgr:true,version:2,teams,ratings};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download=`squad-manager-teams-${todayStr()}.json`; a.click();
+    URL.revokeObjectURL(url);
+    showToast("✓ Exported to Squad Manager format");
+  }
+
+  // ── Create team ──
+  function addPlayer() {
+    if(!npName.trim()) return;
+    const parts=npName.trim().split(" ");
+    const p={id:uid(),firstName:parts[0],lastName:parts.slice(1).join(" "),nickname:parts[0],singletNumber:npNum.trim()||"0"};
+    setNewTeam(t=>({...t,players:[...t.players,p]}));
+    setNpName(""); setNpNum("");
+  }
+  function createTeam() {
+    if(!newTeam.club.trim()){ showToast("⚠ Team name required"); return; }
+    saveTeams([...teams,{...newTeam,id:uid()}]);
+    setShowCreate(false);
+    setNewTeam({club:"",league:"",season:"",ageBracket:"",year:String(new Date().getFullYear()),players:[]});
+    showToast("✓ Team created");
+  }
+
+  // ── Session ──
+  function openSession(team) {
+    setSelTeam(team);
+    const date=todayStr(); setSessionDate(date);
+    const prev=sessions[team.id]?.[date];
+    setAttendees(prev ? new Set(prev) : new Set(team.players.map(p=>p.id)));
+    setIsSaved(!!prev);
+    setGroups([]); setGroupConfig("all2"); setGroupMode("random");
+    setScreen("session");
+  }
+  function changeDate(date) {
+    setSessionDate(date);
+    const prev=sessions[selTeam?.id]?.[date];
+    setAttendees(prev ? new Set(prev) : new Set(selTeam?.players.map(p=>p.id)||[]));
+    setIsSaved(!!prev);
+  }
+  function togglePlayer(id) { setAttendees(s=>{ const n=new Set(s); n.has(id)?n.delete(id):n.add(id); return n; }); setIsSaved(false); }
+  function markAll(v) { setAttendees(v ? new Set(selTeam.players.map(p=>p.id)) : new Set()); setIsSaved(false); }
+  function saveAtt() {
+    const ns={...sessions,[selTeam.id]:{...(sessions[selTeam.id]||{}),[sessionDate]:[...attendees]}};
+    saveSessions(ns); setIsSaved(true); showToast("✓ Attendance saved");
+  }
+
+  // ── Groups ──
+  function goGroups() {
+    if(attendees.size<2){ showToast("⚠ Need at least 2 players"); return; }
+    setGroups([]); setGroupConfig("all2"); setGroupMode("random");
+    setScreen("groups");
+    setTimeout(()=>groupsRef.current?.scrollTo({top:0,behavior:"instant"}),30);
+  }
+  function genGroups(cfg=groupConfig, mode=groupMode) {
+    const present=selTeam.players.filter(p=>attendees.has(p.id));
+    if(present.length<2){ showToast("⚠ Need at least 2 players"); return; }
+    setGroups(makeGroups(present,cfg,mode,ratings,selTeam.id));
+  }
+  function onCfgChange(cfg)  { setGroupConfig(cfg);  if(groups.length) genGroups(cfg, groupMode); }
+  function onModeChange(mode){ setGroupMode(mode);   if(groups.length) genGroups(groupConfig, mode); }
+
+  // ── Display helpers ──
+  const pPos     = (p,team) => { const r=ratings[`${team?.id}_${p.id}`]; return r ? POSITIONS[r.position]||"—" : "—"; };
+  const pOverall = (p,team) => calcOverall(ratings[`${team?.id}_${p.id}`]);
+  function teamHistory(team) {
+    if(!team||!sessions[team.id]) return [];
+    return Object.entries(sessions[team.id]).map(([date,ids])=>({date,ids,count:ids.length})).sort((a,b)=>b.date.localeCompare(a.date));
+  }
+
+  const attCount  = attendees.size;
+  const totalCount = selTeam?.players.length||0;
+  const presentCfg = ALL_CFGS.find(c=>c.id===groupConfig);
+
+  return (
+    <div className="app">
+      <div className="orb1"/><div className="orb2"/>
+      <input type="file" accept=".json" ref={importRef} style={{display:"none"}} onChange={onImport}/>
+
+      {/* ══════════════════ HOME ══════════════════ */}
+      {screen==="home" && (
+        <>
+          <div className="hdr">
+            <div className="hdr-logo">🏀</div>
+            <div className="hdr-titles">
+              <div className="hdr-title">Training Manager</div>
+            </div>
+          </div>
+
+          <div className="screen">
+            <div className="screen-inner">
+
+              {tab==="teams" && (
+                <>
+                  <div className="hero">
+                    <div className="hero-greeting">Ready to train?</div>
+                    <div className="hero-title">Your <span className="hero-teal">Teams</span></div>
+                  </div>
+                  <div className="action-row">
+                    <button className="action-btn" onClick={()=>importRef.current?.click()}>
+                      <span className="action-icon">📥</span>
+                      <div><div className="action-lbl">Import</div><div className="action-sub">From Squad Manager</div></div>
+                    </button>
+                    <button className="action-btn" onClick={onExport} disabled={!teams.length}>
+                      <span className="action-icon">📤</span>
+                      <div><div className="action-lbl">Export</div><div className="action-sub">To Squad Manager</div></div>
+                    </button>
+                  </div>
+                  <div className="sect">
+                    <div className="sect-lbl">Your Teams</div>
+                    {teams.length===0 ? (
+                      <div className="empty">
+                        <div className="empty-icon">🏀</div>
+                        <div className="empty-title">No Teams Yet</div>
+                        <div className="empty-desc">Import from Squad Manager or create a new team to get started.</div>
+                      </div>
+                    ) : teams.map(team=>(
+                      <div key={team.id} className="card team-card card-clickable" onClick={()=>openSession(team)}>
+                        <div className="team-badge">{(team.ageBracket||"").replace(/[^0-9]/g,"")||"🏀"}</div>
+                        <div className="team-info">
+                          <div className="team-name">{team.club}</div>
+                          <div className="team-meta">{[team.league,team.season,team.ageBracket].filter(Boolean).join(" · ")}</div>
+                        </div>
+                        <div><div className="team-count">{team.players.length}</div><div className="team-count-lbl">Players</div></div>
+                        <div className="team-arr">›</div>
+                      </div>
+                    ))}
+                    <div style={{marginTop:14}}>
+                      <button className="btn btn-secondary" style={{width:"100%"}} onClick={()=>setShowCreate(true)}>+ Create New Team</button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {tab==="history" && (
+                <>
+                  <div className="hero">
+                    <div className="hero-greeting">Track your progress</div>
+                    <div className="hero-title">Attendance <span className="hero-teal">History</span></div>
+                  </div>
+                  {teams.length===0 || teams.every(t=>!teamHistory(t).length) ? (
+                    <div className="empty">
+                      <div className="empty-icon">📋</div>
+                      <div className="empty-title">No History Yet</div>
+                      <div className="empty-desc">Start a training session to begin tracking attendance records.</div>
+                    </div>
+                  ) : teams.map(team=>{
+                    const hist=teamHistory(team);
+                    if(!hist.length) return null;
+                    return (
+                      <div key={team.id} className="sect">
+                        <div className="sect-lbl">{team.club}</div>
+                        {hist.map(({date,ids,count})=>{
+                          const d=new Date(date+"T12:00:00");
+                          const names=ids.map(id=>team.players.find(p=>p.id===id)?.nickname||"?").join(", ");
+                          return (
+                            <div key={date} className="card hist-card" style={{marginBottom:8}}>
+                              <div className="hist-date-box">
+                                <div className="h-day">{d.getDate()}</div>
+                                <div className="h-month">{d.toLocaleString("en-AU",{month:"short"})}</div>
+                              </div>
+                              <div className="hist-detail">
+                                <div className="hist-wd">{d.toLocaleString("en-AU",{weekday:"long",year:"numeric"})}</div>
+                                <div className="hist-names">{names}</div>
+                              </div>
+                              <div><div className="hist-count">{count}</div><div className="hist-count-lbl">Present</div></div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+
+            </div>
+          </div>
+
+          <nav className="bot-nav">
+            <button className={`nav-btn ${tab==="teams"?"active":""}`} onClick={()=>setTab("teams")}>
+              <span className="nav-icon">🏀</span><span className="nav-lbl">Teams</span>
+            </button>
+            <button className={`nav-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>
+              <span className="nav-icon">📋</span><span className="nav-lbl">History</span>
+            </button>
+          </nav>
+        </>
+      )}
+
+      {/* ══════════════════ SESSION / ROLL CALL ══════════════════ */}
+      {screen==="session" && selTeam && (
+        <>
+          <div className="hdr">
+            <button className="btn-back" onClick={()=>setScreen("home")}>‹</button>
+            <div className="hdr-titles">
+              <div className="hdr-title" style={{fontSize:16}}>{selTeam.club}</div>
+              <div className="hdr-sub">{[selTeam.league,selTeam.ageBracket].filter(Boolean).join(" · ")}</div>
+            </div>
+            <button
+              className={`btn ${isSaved?"btn-saved":"btn-primary"}`}
+              style={{height:36,fontSize:13,padding:"0 14px",minWidth:92}}
+              onClick={saveAtt}
+            >
+              {isSaved ? "✓ Saved" : "💾 Save"}
+            </button>
+          </div>
+
+          <div className="screen">
+            <div className="screen-inner">
+              <div className="date-row">
+                <span className="date-icon">📅</span>
+                <span className="date-lbl">Training Date</span>
+                <input type="date" value={sessionDate} onChange={e=>changeDate(e.target.value)}/>
+              </div>
+              <div className="att-stats">
+                <div className="att-stat"><div className="att-num">{attCount}</div><div className="att-lbl">Present</div></div>
+                <div className="att-stat"><div className="att-num absent">{totalCount-attCount}</div><div className="att-lbl">Absent</div></div>
+                <div className="att-stat"><div className="att-num total">{totalCount}</div><div className="att-lbl">Total</div></div>
+              </div>
+              <div className="sect">
+                <div className="btn-row" style={{marginBottom:16}}>
+                  <button className="btn btn-ghost" onClick={()=>markAll(true)}>✓ All Present</button>
+                  <button className="btn btn-ghost" onClick={()=>markAll(false)}>✗ All Absent</button>
+                </div>
+                {selTeam.players.map(player=>{
+                  const present=attendees.has(player.id);
+                  const pos=pPos(player,selTeam);
+                  const ovr=pOverall(player,selTeam);
+                  return (
+                    <div key={player.id} className={`player-row ${present?"present":"absent"}`} onClick={()=>togglePlayer(player.id)}>
+                      <div className="p-num">#{player.singletNumber}</div>
+                      <div className="p-info">
+                        <div className="p-name">{player.nickname||player.firstName}</div>
+                        <div className="p-meta">
+                          <span>{player.firstName} {player.lastName}</span>
+                          {pos!=="—" && <span>· {pos}</span>}
+                          {ovr!==null && <span>· OVR {ovr}</span>}
+                        </div>
+                      </div>
+                      <div className="p-check">{present && <span className="check-tick">✓</span>}</div>
+                    </div>
+                  );
+                })}
+                <div style={{marginTop:20}}>
+                  <button className="btn btn-primary" style={{width:"100%"}} onClick={goGroups}>Generate Groups →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ══════════════════ GROUPS ══════════════════ */}
+      {screen==="groups" && selTeam && (
+        <>
+          <div className="hdr">
+            <button className="btn-back" onClick={()=>setScreen("session")}>‹</button>
+            <div className="hdr-titles">
+              <div className="hdr-title" style={{fontSize:16}}>Group Generator</div>
+              <div className="hdr-sub">{attCount} players · {selTeam.club}</div>
+            </div>
+            <button
+              className={`btn ${isSaved?"btn-saved":"btn-secondary"}`}
+              style={{height:36,fontSize:13,padding:"0 12px",minWidth:84}}
+              onClick={saveAtt}
+            >
+              {isSaved?"✓ Saved":"💾 Save"}
+            </button>
+          </div>
+
+          <div className="screen" ref={groupsRef}>
+            <div className="screen-inner">
+
+              {/* Group Type — two rows */}
+              <div className="cfg-section">
+                <div className="sect-lbl" style={{padding:0,marginBottom:14}}>Group Type</div>
+                <div className="cfg-row-label">All Players</div>
+                <div className="cfg-row" style={{marginBottom:12}}>
+                  {ALL_CONFIGS.map(c=>(
+                    <button key={c.id} className={`cfg-btn ${groupConfig===c.id?"active":""}`} onClick={()=>onCfgChange(c.id)}>
+                      <div className="cfg-num">{c.label}</div>
+                      <div className="cfg-sub">{c.sub}</div>
+                    </button>
+                  ))}
+                </div>
+                <div className="cfg-row-label">Single Group</div>
+                <div className="cfg-row">
+                  {ONE_CONFIGS.map(c=>(
+                    <button key={c.id} className={`cfg-btn ${groupConfig===c.id?"active":""}`} onClick={()=>onCfgChange(c.id)}>
+                      <div className="cfg-num">{c.label}</div>
+                      <div className="cfg-sub">{c.sub}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Group Method — 5 icon cards */}
+              <div className="sect" style={{marginBottom:10}}>
+                <div className="sect-lbl">Group Method</div>
+              </div>
+              <div className="mode-row">
+                {MODES.map(m=>{
+                  const Icon=MODE_ICONS[m.id];
+                  return (
+                    <button key={m.id} className={`mode-card ${groupMode===m.id?"active":""}`} onClick={()=>onModeChange(m.id)}>
+                      <Icon/>
+                      <div className="mode-lbl">{m.label}</div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Generate button */}
+              <div className="gen-section">
+                <button className="btn btn-primary" style={{width:"100%"}} onClick={()=>genGroups()}>
+                  {groups.length ? "🔄 Regenerate" : "⚡ Generate Groups"}
+                </button>
+              </div>
+
+              {/* Groups or empty prompt */}
+              {groups.length===0 ? (
+                <div className="gen-empty">
+                  <div className="gen-empty-icon">⚡</div>
+                  <div className="gen-empty-title">Ready to generate</div>
+                  <div className="gen-empty-sub">Pick your group type and method above,<br/>then tap Generate Groups</div>
+                </div>
+              ) : (
+                <>
+                  <div className="sect" style={{marginBottom:12}}>
+                    <div className="sect-lbl">{groups.length} Group{groups.length!==1?"s":""} · {presentCfg?.full}</div>
+                  </div>
+                  <div className="groups-list">
+                    {groups.map((group,gi)=>(
+                      <div key={gi} className="group-card" style={{animationDelay:`${gi*55}ms`}}>
+                        <div className="group-hdr">
+                          <span className="group-num" style={{color:GROUP_COLORS[gi%GROUP_COLORS.length]}}>Group {gi+1}</span>
+                          <span className="group-sz">{group.length} player{group.length!==1?"s":""}</span>
+                        </div>
+                        <div className="group-players">
+                          {group.map((player,pi)=>{
+                            const color=CHIP_COLORS[(gi*5+pi)%CHIP_COLORS.length];
+                            const pos=pPos(player,selTeam);
+                            return (
+                              <div key={player.id} className="p-chip">
+                                <div className="chip-dot" style={{background:color}}/>
+                                <span className="chip-num">#{player.singletNumber}</span>
+                                <span className="chip-name">{player.nickname||player.firstName}</span>
+                                {pos!=="—" && <span className="chip-pos">{pos}</span>}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ══════════════════ CREATE TEAM MODAL ══════════════════ */}
+      {showCreate && (
+        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setShowCreate(false);}}>
+          <div className="modal-sheet">
+            <div className="modal-handle"/>
+            <div className="modal-title">Create New Team</div>
+            <div className="form-grp">
+              <label className="form-lbl">Club Name *</label>
+              <input className="form-input" placeholder="e.g. Collingwood All Stars" value={newTeam.club} onChange={e=>setNewTeam(t=>({...t,club:e.target.value}))}/>
+            </div>
+            <div className="form-row">
+              <div className="form-grp">
+                <label className="form-lbl">League</label>
+                <input className="form-input" placeholder="e.g. EDJBL" value={newTeam.league} onChange={e=>setNewTeam(t=>({...t,league:e.target.value}))}/>
+              </div>
+              <div className="form-grp">
+                <label className="form-lbl">Age Bracket</label>
+                <input className="form-input" placeholder="e.g. U12" value={newTeam.ageBracket} onChange={e=>setNewTeam(t=>({...t,ageBracket:e.target.value}))}/>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-grp">
+                <label className="form-lbl">Season</label>
+                <input className="form-input" placeholder="e.g. Summer25/26" value={newTeam.season} onChange={e=>setNewTeam(t=>({...t,season:e.target.value}))}/>
+              </div>
+              <div className="form-grp">
+                <label className="form-lbl">Year</label>
+                <input className="form-input" placeholder="2026" value={newTeam.year} onChange={e=>setNewTeam(t=>({...t,year:e.target.value}))}/>
+              </div>
+            </div>
+            <div className="divider"/>
+            <label className="form-lbl" style={{marginBottom:10,display:"block"}}>Players</label>
+            {newTeam.players.length>0 && (
+              <div className="players-mini">
+                {newTeam.players.map(p=>(
+                  <div key={p.id} className="mini-chip" onClick={()=>setNewTeam(t=>({...t,players:t.players.filter(x=>x.id!==p.id)}))} title="Tap to remove">
+                    <span className="mini-num">#{p.singletNumber}</span>
+                    <span>{p.nickname}</span>
+                    <span style={{color:"var(--muted)",marginLeft:2,fontSize:10}}>✕</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="form-row" style={{marginBottom:10}}>
+              <div className="form-grp">
+                <label className="form-lbl">Player Name</label>
+                <input className="form-input" placeholder="First Last" value={npName} onChange={e=>setNpName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addPlayer()}/>
+              </div>
+              <div className="form-grp" style={{maxWidth:88}}>
+                <label className="form-lbl">Number</label>
+                <input className="form-input" placeholder="#" value={npNum} onChange={e=>setNpNum(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addPlayer()}/>
+              </div>
+            </div>
+            <button className="btn btn-secondary" style={{width:"100%",marginBottom:20}} onClick={addPlayer}>+ Add Player</button>
+            <div className="btn-row">
+              <button className="btn btn-secondary" style={{flex:1}} onClick={()=>setShowCreate(false)}>Cancel</button>
+              <button className="btn btn-primary" style={{flex:2}} onClick={createTeam}>Create Team</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<TrainingManager/>);
+</script>
+</body>
+</html>
