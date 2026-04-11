@@ -20,8 +20,8 @@
   --surface:rgba(255,255,255,0.045);--surface2:rgba(255,255,255,0.085);--surface3:rgba(255,255,255,0.13);
   --teal:#38BDF8;--teal-l:#7DDBFC;--teal-d:#0369A1;--teal-glow:rgba(56,189,248,0.3);--teal-bg:rgba(56,189,248,0.1);
   --green:#22C55E;--green-l:#4ADE80;--green-glow:rgba(34,197,94,0.32);
-  --gold:#F59E0B;--gold-bg:rgba(245,158,11,0.12);--gold-border:rgba(245,158,11,0.45);
-  --red:#EF4444;--red-bg:rgba(239,68,68,0.12);--red-border:rgba(239,68,68,0.45);
+  --red:#EF4444;--red-bg:rgba(239,68,68,0.08);--red-border:rgba(239,68,68,0.4);
+  --gold:#F59E0B;--gold-bg:rgba(245,158,11,0.12);
   --purple:#A78BFA;--orange:#F97316;
   --text:#E8EAF6;--muted:rgba(232,234,246,0.42);--muted2:rgba(232,234,246,0.22);
   --border:rgba(56,189,248,0.22);--border-l:rgba(255,255,255,0.065);
@@ -41,7 +41,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
 .hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,var(--teal-l),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
 .hdr-sub{font-size:11px;color:var(--muted);letter-spacing:0.3px;margin-top:1px;}
 .btn-back{width:38px;height:38px;border-radius:11px;background:var(--surface);border:1px solid var(--border-l);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.2s;flex-shrink:0;}
-.btn-back:hover{background:var(--surface2);border-color:var(--border);}
+.btn-back:hover{background:var(--surface2);}
 .sect{padding:0 20px;margin-bottom:20px;}
 .sect-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:11px;display:flex;align-items:center;gap:10px;}
 .sect-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
@@ -70,10 +70,9 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(56,189,248,0.45);}
 .btn-primary:active{transform:translateY(0);}
 .btn-saved{background:linear-gradient(135deg,var(--green-l),#15803D);color:#fff;box-shadow:0 4px 18px var(--green-glow);}
-.btn-saved:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(34,197,94,0.45);}
+.btn-saved:hover{transform:translateY(-1px);}
 .btn-gold{background:linear-gradient(135deg,#FCD34D,#D97706);color:#1A0E00;box-shadow:0 4px 18px rgba(245,158,11,0.35);}
 .btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(245,158,11,0.5);}
-.btn-gold:active{transform:translateY(0);}
 .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border-l);}
 .btn-secondary:hover{background:var(--surface3);}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid transparent;font-size:13px;height:36px;}
@@ -82,10 +81,9 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-
 .btn-row .btn{flex:1;}
 .hero{padding:4px 20px 22px;}
 .hero-greeting{font-size:13px;color:var(--muted);margin-bottom:3px;}
-.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;letter-spacing:0.3px;line-height:1.05;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;line-height:1.05;}
 .hero-teal{color:var(--teal);}
 .date-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);margin:0 20px 18px;}
-.date-icon{font-size:17px;}
 .date-lbl{font-size:13px;color:var(--muted);font-weight:500;}
 input[type='date']{background:none;border:none;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-left:auto;color-scheme:dark;outline:none;}
 .att-stats{display:flex;gap:10px;padding:0 20px;margin-bottom:18px;}
@@ -113,14 +111,12 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 .nav-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
 .toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:rgba(15,20,34,0.97);border:1px solid var(--border);border-radius:22px;padding:10px 22px;font-size:14px;font-weight:500;backdrop-filter:blur(12px);z-index:9999;white-space:nowrap;animation:toastIn 0.25s ease;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-/* Swipeable history rows */
-.hist-swipe-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:8px;}
-.hist-delete-bg{position:absolute;top:0;right:0;bottom:0;width:90px;background:var(--red);display:flex;align-items:center;justify-content:center;border-radius:0 var(--r) var(--r) 0;}
+/* Swipe-to-delete */
+.hist-swipe-outer{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:8px;}
+.hist-delete-reveal{position:absolute;top:0;right:0;bottom:0;width:80px;background:var(--red);display:flex;align-items:center;justify-content:center;border-radius:0 var(--r) var(--r) 0;cursor:pointer;}
 .hist-delete-lbl{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;}
-.hist-inner{position:relative;transition:transform 0.25s ease;touch-action:pan-y;will-change:transform;}
-.hist-inner.swiped{transform:translateX(-90px);}
+.hist-slider{will-change:transform;touch-action:pan-y;}
 .hist-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:12px 14px;}
-.hist-card.missed-alert{border-color:rgba(239,68,68,0.35);background:rgba(239,68,68,0.06);}
 .hist-date-box{text-align:center;background:rgba(56,189,248,0.09);border:1px solid rgba(56,189,248,0.25);border-radius:11px;padding:8px 12px;min-width:54px;flex-shrink:0;}
 .h-day{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--teal);line-height:1;}
 .h-month{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
@@ -129,25 +125,23 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 .hist-names{font-size:12px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hist-count{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--teal);text-align:center;flex-shrink:0;line-height:1;}
 .hist-count-lbl{font-size:9px;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:0.5px;}
-/* Player attendance stats */
-.player-att-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 20px;margin-bottom:20px;}
-.player-att-card{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);padding:10px 12px;display:flex;align-items:center;gap:10px;}
-.player-att-card.missed-recent{border-color:var(--red-border);background:var(--red-bg);}
+/* Player att stats */
+.player-att-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 20px;margin-bottom:16px;}
+.pac{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);padding:9px 11px;}
+.pac.missed{border-color:var(--red-border);background:var(--red-bg);}
 .pac-info{flex:1;min-width:0;}
 .pac-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pac-sessions{font-size:11px;color:var(--muted);margin-top:2px;}
-.pac-badge{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--teal);line-height:1;flex-shrink:0;}
-.pac-badge.missed{color:var(--red);}
-.pac-miss-icon{font-size:14px;flex-shrink:0;}
+.pac-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.pac-count{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--teal);line-height:1;}
+.pac-count.missed{color:var(--red);}
 /* Group config */
 .cfg-section{padding:0 20px;margin-bottom:20px;}
 .cfg-row-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:14px;}
-.cfg-row-label:first-child{margin-top:0;}
-.cfg-row{display:flex;gap:8px;margin-bottom:0;}
+.cfg-row{display:flex;gap:8px;}
 .cfg-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;color:var(--muted);}
 .cfg-btn:hover{background:var(--surface2);color:var(--text);}
 .cfg-btn.active{background:var(--teal-bg);border-color:rgba(56,189,248,0.52);color:var(--text);}
-.cfg-num{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;line-height:1;transition:color 0.15s;}
+.cfg-num{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;line-height:1;}
 .cfg-btn.active .cfg-num{color:var(--teal);}
 .cfg-sub{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;margin-top:3px;font-weight:600;}
 .mode-row{display:flex;gap:6px;padding:0 20px;margin-bottom:20px;}
@@ -156,7 +150,7 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 .mode-card.active{background:var(--teal-bg);border-color:rgba(56,189,248,0.5);box-shadow:0 0 14px rgba(56,189,248,0.13);}
 .mode-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;color:var(--muted);width:100%;text-align:center;padding:0 2px;}
 .mode-card.active .mode-lbl{color:var(--teal);}
-.gen-section{padding:0 20px;margin-bottom:16px;display:flex;gap:10px;}
+.gen-btns{display:flex;gap:10px;padding:0 20px;margin-bottom:16px;}
 .gen-empty{display:flex;flex-direction:column;align-items:center;padding:44px 24px;text-align:center;gap:10px;}
 .gen-empty-icon{font-size:46px;opacity:0.38;}
 .gen-empty-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--muted);}
@@ -172,22 +166,23 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 .chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .chip-num{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--muted);}
 .chip-name{font-size:13px;font-weight:600;}
-.chip-pos{font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:0.5px;color:var(--muted);background:rgba(255,255,255,0.06);padding:2px 5px;border-radius:4px;}
-/* Golden Child screen */
+.chip-pos{font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--muted);background:rgba(255,255,255,0.06);padding:2px 5px;border-radius:4px;}
+/* Golden Child */
 .gc-teams{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px;margin-bottom:20px;}
 .gc-team{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);overflow:hidden;}
-.gc-team-hdr{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-l);}
-.gc-team-name{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;}
+.gc-team-hdr{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-l);}
+.gc-team-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;letter-spacing:1.5px;}
 .gc-players{padding:10px;display:flex;flex-direction:column;gap:6px;}
-.gc-player-row{display:flex;align-items:center;gap:8px;}
-.gc-num-badge{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;min-width:22px;text-align:center;line-height:1;}
-.gc-player-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.gc-draw-section{padding:0 20px;margin-bottom:24px;}
-.gc-result{padding:20px;margin:0 20px 20px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);text-align:center;animation:slideUp 0.3s ease;}
-.gc-result-lbl{font-size:12px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif;font-weight:800;}
-.gc-result-nums{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
-.gc-result-num{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;line-height:1;}
-.gc-result-desc{font-size:13px;color:var(--muted);margin-top:10px;}
+.gc-prow{display:flex;align-items:center;gap:7px;transition:opacity 0.3s;}
+.gc-badge{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;min-width:24px;text-align:center;}
+.gc-pname{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gc-draw-area{padding:0 20px;margin-bottom:20px;display:flex;gap:10px;}
+.gc-result{padding:22px 20px;margin:0 20px 20px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);text-align:center;animation:slideUp 0.3s ease;}
+.gc-result-lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.gc-result-nums{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.gc-result-num{font-family:'Barlow Condensed',sans-serif;font-size:60px;font-weight:900;line-height:1;}
+.gc-result-sub{font-size:13px;color:var(--muted);margin-top:12px;}
+/* Empty / Modal */
 .empty{text-align:center;padding:52px 24px;}
 .empty-icon{font-size:48px;margin-bottom:14px;}
 .empty-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;}
@@ -217,128 +212,136 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+const { useState, useEffect, useRef } = React;
 
-const POSITIONS = { 0:"—",1:"PG",2:"SG",3:"SF",4:"PF",5:"C" };
-const SKILL_KEYS = ["speed","energy","layup","jumpshot","three","foulshot","passing","receiving","dribble","dribblepressure","sharing","defplayer","defset","offdef","reboff","rebdef","setplays","composure"];
-const MODES = [
-  { id:"random",label:"Random" },{ id:"samePos",label:"Same Pos" },{ id:"diffPos",label:"Vary Pos" },{ id:"sameSkill",label:"Similar" },{ id:"mixSkill",label:"Mixed" },
-];
-const ALL_CONFIGS = [
-  { id:"all2",label:"Pairs",sub:"×2",full:"Groups of 2",size:2 },
-  { id:"all3",label:"Trios",sub:"×3",full:"Groups of 3",size:3 },
-  { id:"all4",label:"Fours",sub:"×4",full:"Groups of 4",size:4 },
-];
-const NUM_CONFIGS = [
-  { id:"num2",label:"2",sub:"Groups",full:"2 Groups" },
-  { id:"num3",label:"3",sub:"Groups",full:"3 Groups" },
-  { id:"num4",label:"4",sub:"Groups",full:"4 Groups" },
-];
-const ONE_CONFIGS = [
-  { id:"one2",label:"2",sub:"pair",full:"One Pair",size:2 },
-  { id:"one3",label:"3",sub:"trio",full:"One Trio",size:3 },
-  { id:"one4",label:"4",sub:"group",full:"Group of 4",size:4 },
-  { id:"one5",label:"5",sub:"group",full:"Group of 5",size:5 },
-  { id:"one6",label:"6",sub:"group",full:"Group of 6",size:6 },
-];
-const ALL_CFGS = [...ALL_CONFIGS, ...NUM_CONFIGS, ...ONE_CONFIGS];
-const CHIP_COLORS = ["#38BDF8","#A78BFA","#34D399","#F472B6","#FBBF24","#60A5FA","#4ADE80","#FB923C","#E879F9","#2DD4BF"];
-const GROUP_COLORS = ["rgba(56,189,248,0.9)","rgba(167,139,250,0.9)","rgba(52,211,153,0.9)","rgba(244,114,182,0.9)","rgba(251,191,36,0.9)","rgba(45,212,191,0.9)"];
-const TEAM_COLORS = [["#38BDF8","rgba(56,189,248,0.12)","rgba(56,189,248,0.45)"],["#F472B6","rgba(244,114,182,0.12)","rgba(244,114,182,0.45)"]];
+const POSITIONS = {0:'—',1:'PG',2:'SG',3:'SF',4:'PF',5:'C'};
+const SKILL_KEYS = ['speed','energy','layup','jumpshot','three','foulshot','passing','receiving','dribble','dribblepressure','sharing','defplayer','defset','offdef','reboff','rebdef','setplays','composure'];
+const MODES = [{id:'random',label:'Random'},{id:'samePos',label:'Same Pos'},{id:'diffPos',label:'Vary Pos'},{id:'sameSkill',label:'Similar'},{id:'mixSkill',label:'Mixed'}];
+const ALL_CONFIGS = [{id:'all2',label:'Pairs',sub:'×2',full:'Groups of 2',size:2},{id:'all3',label:'Trios',sub:'×3',full:'Groups of 3',size:3},{id:'all4',label:'Fours',sub:'×4',full:'Groups of 4',size:4}];
+const NUM_CONFIGS = [{id:'num2',label:'2',sub:'Groups',full:'2 Groups'},{id:'num3',label:'3',sub:'Groups',full:'3 Groups'},{id:'num4',label:'4',sub:'Groups',full:'4 Groups'}];
+const ONE_CONFIGS = [{id:'one2',label:'2',sub:'pair',full:'One Pair',size:2},{id:'one3',label:'3',sub:'trio',full:'One Trio',size:3},{id:'one4',label:'4',sub:'group',full:'Group of 4',size:4},{id:'one5',label:'5',sub:'group',full:'Group of 5',size:5},{id:'one6',label:'6',sub:'group',full:'Group of 6',size:6}];
+const ALL_CFGS = [...ALL_CONFIGS,...NUM_CONFIGS,...ONE_CONFIGS];
+const CHIP_COLORS = ['#38BDF8','#A78BFA','#34D399','#F472B6','#FBBF24','#60A5FA','#4ADE80','#FB923C','#E879F9','#2DD4BF'];
+const GROUP_COLORS = ['rgba(56,189,248,0.9)','rgba(167,139,250,0.9)','rgba(52,211,153,0.9)','rgba(244,114,182,0.9)','rgba(251,191,36,0.9)','rgba(45,212,191,0.9)'];
+const TEAM_COLS = [['#38BDF8','rgba(56,189,248,0.1)','rgba(56,189,248,0.4)'],['#F472B6','rgba(244,114,182,0.1)','rgba(244,114,182,0.4)']];
 
 function uid() { return Math.random().toString(36).slice(2,10); }
-function todayStr() { return new Date().toISOString().split("T")[0]; }
+function todayStr() { return new Date().toISOString().split('T')[0]; }
 function calcOverall(r) {
-  if(!r) return null;
-  const vals=SKILL_KEYS.map(k=>r[k]).filter(v=>typeof v==="number");
+  if (!r) return null;
+  const vals = SKILL_KEYS.map(k=>r[k]).filter(v=>typeof v==='number');
   return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10 : null;
 }
 function shuffle(arr) { return [...arr].sort(()=>Math.random()-0.5); }
 function divideAll(arr, size) {
-  if(!arr.length) return [];
+  if (!arr.length) return [];
   const a=[...arr], groups=[];
-  if(size===2){
-    while(a.length){ if(a.length===1){ groups.length?groups[groups.length-1].push(a.pop()):groups.push(a.splice(0)); break; } if(a.length===3){ groups.push(a.splice(0,3)); break; } groups.push(a.splice(0,2)); }
-  } else if(size===3){
-    const rem=a.length%3; if(rem===1&&a.length>=4) groups.push(a.splice(0,4)); else if(rem===2) groups.push(a.splice(0,2));
-    while(a.length>=3) groups.push(a.splice(0,3)); if(a.length) groups.push(a.splice(0));
-  } else if(size===4){
-    const rem=a.length%4; if(rem===1&&a.length>=5) groups.push(a.splice(0,5)); else if(rem===2&&a.length>=6){ groups.push(a.splice(0,3)); groups.push(a.splice(0,3)); } else if(rem===3) groups.push(a.splice(0,3));
-    while(a.length>=4) groups.push(a.splice(0,4)); if(a.length) groups.push(a.splice(0));
+  if (size===2) {
+    while (a.length) {
+      if (a.length===1) { groups.length ? groups[groups.length-1].push(a.pop()) : groups.push(a.splice(0)); break; }
+      if (a.length===3) { groups.push(a.splice(0,3)); break; }
+      groups.push(a.splice(0,2));
+    }
+  } else if (size===3) {
+    const rem=a.length%3;
+    if (rem===1&&a.length>=4) groups.push(a.splice(0,4));
+    else if (rem===2) groups.push(a.splice(0,2));
+    while (a.length>=3) groups.push(a.splice(0,3));
+    if (a.length) groups.push(a.splice(0));
+  } else if (size===4) {
+    const rem=a.length%4;
+    if (rem===1&&a.length>=5) groups.push(a.splice(0,5));
+    else if (rem===2&&a.length>=6) { groups.push(a.splice(0,3)); groups.push(a.splice(0,3)); }
+    else if (rem===3) groups.push(a.splice(0,3));
+    while (a.length>=4) groups.push(a.splice(0,4));
+    if (a.length) groups.push(a.splice(0));
   }
   return groups.filter(g=>g.length);
 }
 function divideIntoN(arr, n) {
-  if(!arr.length||n<1) return [];
+  if (!arr.length||n<1) return [];
   const a=shuffle(arr), groups=Array.from({length:n},()=>[]);
   a.forEach((p,i)=>groups[i%n].push(p));
   return groups.filter(g=>g.length);
 }
-function arrangePlayers(players,mode,ratings,teamId) {
-  const r=p=>ratings?.[`${teamId}_${p.id}`]; const pos=p=>r(p)?.position||0; const skill=p=>calcOverall(r(p))??5; const arr=[...players];
-  switch(mode){
-    case "random": return arr.sort(()=>Math.random()-0.5);
-    case "samePos": return arr.sort((a,b)=>pos(a)-pos(b));
-    case "sameSkill": return arr.sort((a,b)=>skill(a)-skill(b));
-    case "diffPos": { const byPos={}; arr.forEach(p=>{const k=pos(p);(byPos[k]=byPos[k]||[]).push(p);});Object.values(byPos).forEach(g=>g.sort(()=>Math.random()-0.5));const keys=Object.keys(byPos).sort(),result=[];let i=0,added=true;while(result.length<arr.length&&added){added=false;for(const k of keys){if(i<byPos[k].length){result.push(byPos[k][i]);added=true;}}i++;}return result; }
-    case "mixSkill": { arr.sort((a,b)=>skill(b)-skill(a));const result=[];let lo=arr.length-1,hi=0;while(hi<=lo){result.push(arr[hi++]);if(hi<=lo) result.push(arr[lo--]);}return result; }
-    default: return arr;
+function arrangePlayers(players, mode, ratings, teamId) {
+  const r=p=>ratings&&ratings[teamId+'_'+p.id];
+  const pos=p=>(r(p)||{}).position||0;
+  const skill=p=>calcOverall(r(p))!=null?calcOverall(r(p)):5;
+  const arr=[...players];
+  if (mode==='random') return arr.sort(()=>Math.random()-0.5);
+  if (mode==='samePos') return arr.sort((a,b)=>pos(a)-pos(b));
+  if (mode==='sameSkill') return arr.sort((a,b)=>skill(a)-skill(b));
+  if (mode==='diffPos') {
+    const byPos={};
+    arr.forEach(p=>{ const k=pos(p); if(!byPos[k]) byPos[k]=[]; byPos[k].push(p); });
+    Object.values(byPos).forEach(g=>g.sort(()=>Math.random()-0.5));
+    const keys=Object.keys(byPos).sort(), result=[];
+    let i=0, added=true;
+    while (result.length<arr.length&&added) {
+      added=false;
+      for (const k of keys) { if (i<byPos[k].length) { result.push(byPos[k][i]); added=true; } }
+      i++;
+    }
+    return result;
   }
+  if (mode==='mixSkill') {
+    arr.sort((a,b)=>skill(b)-skill(a));
+    const result=[]; let lo=arr.length-1, hi=0;
+    while (hi<=lo) { result.push(arr[hi++]); if (hi<=lo) result.push(arr[lo--]); }
+    return result;
+  }
+  return arr;
 }
-function makeGroups(players,config,mode,ratings,teamId) {
-  if(config.startsWith("num")) { const n=parseInt(config.replace("num","")); return divideIntoN(arrangePlayers(players,mode,ratings,teamId),n); }
-  const arranged=arrangePlayers(players,mode,ratings,teamId);
-  if(config.startsWith("one")) return [arranged.slice(0,Math.min(parseInt(config.replace("one","")),arranged.length))];
-  return divideAll(arranged,parseInt(config.replace("all","")));
+function makeGroups(players, config, mode, ratings, teamId) {
+  if (config.startsWith('num')) return divideIntoN(arrangePlayers(players,mode,ratings,teamId), parseInt(config.replace('num','')));
+  const arranged=arrangePlayers(players, mode, ratings, teamId);
+  if (config.startsWith('one')) return [arranged.slice(0, Math.min(parseInt(config.replace('one','')), arranged.length))];
+  return divideAll(arranged, parseInt(config.replace('all','')));
 }
 
 const LS = {
-  get:k=>{ try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;} },
-  set:(k,v)=>{ try{localStorage.setItem(k,JSON.stringify(v));}catch{} },
+  get: k => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):null; } catch(e) { return null; } },
+  set: (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e) {} }
 };
 
-// ── Swipeable History Row ──────────────────────────────────────────────────────
-function SwipeHistRow({ team, date, ids, count, onDelete, missedRecent }) {
-  const [swipeX,setSwipeX]=useState(0);
-  const [swiped,setSwiped]=useState(false);
-  const startX=useRef(null);
-  const d=new Date(date+"T12:00:00");
-  const names=ids.map(id=>team.players.find(p=>p.id===id)?.nickname||"?").join(", ");
-  const SNAP=72, FULL=180;
+// ── Swipeable history row ──────────────────────────────────────────────────────
+function SwipeRow({ team, date, ids, count, onDelete }) {
+  const [dx, setDx] = useState(0);
+  const [open, setOpen] = useState(false);
+  const startX = useRef(null);
+  const SNAP = 80, FULL = 200;
+  const d = new Date(date+'T12:00:00');
+  const names = ids.map(id => { const p=team.players.find(p=>p.id===id); return p ? (p.nickname||p.firstName) : '?'; }).join(', ');
 
-  function onTouchStart(e){ startX.current=e.touches[0].clientX; }
-  function onTouchMove(e){
-    if(startX.current===null) return;
-    const dx=startX.current-e.touches[0].clientX;
-    if(dx>0) setSwipeX(Math.min(dx,FULL+20));
+  function ts(e) { startX.current = e.touches[0].clientX; }
+  function tm(e) {
+    if (startX.current===null) return;
+    const delta = startX.current - e.touches[0].clientX;
+    if (delta > 0) setDx(Math.min(delta, FULL+30));
   }
-  function onTouchEnd(){
-    if(swipeX>=FULL){ onDelete(); return; }
-    if(swipeX>=SNAP){ setSwiped(true); setSwipeX(SNAP); }
-    else { setSwiped(false); setSwipeX(0); }
-    startX.current=null;
+  function te() {
+    if (dx >= FULL) { onDelete(); return; }
+    if (dx >= SNAP) { setOpen(true); setDx(SNAP); }
+    else { setOpen(false); setDx(0); }
+    startX.current = null;
   }
-  function handleDeleteClick(){ onDelete(); }
-  function handleCardClick(){ if(swiped){ setSwiped(false); setSwipeX(0); } }
+  function handleCardClick() { if (open) { setOpen(false); setDx(0); } }
+
+  const tx = open && startX.current===null ? SNAP : dx;
 
   return (
-    <div className="hist-swipe-wrap">
-      <div className="hist-delete-bg" onClick={handleDeleteClick}>
-        <div className="hist-delete-lbl">Delete</div>
-      </div>
-      <div
-        className={"hist-inner"+(swiped?" swiped":"")}
-        style={{transform:`translateX(${-swipeX}px)`,transition:startX.current?'none':'transform 0.25s ease'}}
-        onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
-        onClick={handleCardClick}
-      >
-        <div className={"hist-card"+(missedRecent?" missed-alert":"")}>
+    <div className="hist-swipe-outer">
+      <div className="hist-delete-reveal" onClick={onDelete}><div className="hist-delete-lbl">Delete</div></div>
+      <div className="hist-slider" style={{transform:'translateX(-'+tx+'px)', transition: startX.current ? 'none' : 'transform 0.25s ease'}}
+        onTouchStart={ts} onTouchMove={tm} onTouchEnd={te} onClick={handleCardClick}>
+        <div className="hist-card">
           <div className="hist-date-box">
             <div className="h-day">{d.getDate()}</div>
-            <div className="h-month">{d.toLocaleString("en-AU",{month:"short"})}</div>
+            <div className="h-month">{d.toLocaleString('en-AU',{month:'short'})}</div>
           </div>
           <div className="hist-detail">
-            <div className="hist-wd">{d.toLocaleString("en-AU",{weekday:"long",year:"numeric"})}</div>
+            <div className="hist-wd">{d.toLocaleString('en-AU',{weekday:'long',year:'numeric'})}</div>
             <div className="hist-names">{names}</div>
           </div>
           <div><div className="hist-count">{count}</div><div className="hist-count-lbl">Present</div></div>
@@ -348,472 +351,457 @@ function SwipeHistRow({ team, date, ids, count, onDelete, missedRecent }) {
   );
 }
 
-// ── Mode SVG Icons ─────────────────────────────────────────────────────────────
-function IcoRandom() { return (<svg viewBox="0 0 48 48" width="34" height="34" fill="none"><circle cx="24" cy="24" r="22" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.28)" strokeWidth="1.2"/><circle cx="24" cy="30" r="8.5" fill="none" stroke="rgba(251,146,60,0.75)" strokeWidth="1.4"/><path d="M15.8 30 Q24 25.5 32.2 30" stroke="rgba(251,146,60,0.55)" strokeWidth="1" fill="none"/><line x1="24" y1="21.5" x2="24" y2="38.5" stroke="rgba(251,146,60,0.45)" strokeWidth="1"/><text x="8" y="21" fontSize="13" fill="#38BDF8" fontWeight="900" opacity="0.95">?</text><text x="31" y="16" fontSize="9" fill="#A78BFA" opacity="0.85">3</text><text x="34" y="27" fontSize="11" fill="#38BDF8" opacity="0.7">?</text><text x="14" y="13" fontSize="8" fill="#2DD4BF" opacity="0.65">?</text></svg>); }
-function IcoSamePos() { return (<svg viewBox="0 0 48 48" width="34" height="34" fill="none"><circle cx="24" cy="24" r="22" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.28)" strokeWidth="1.2"/><rect x="10" y="10" width="28" height="24" rx="2" fill="none" stroke="rgba(56,189,248,0.2)" strokeWidth="0.8"/><path d="M10 26 Q24 20 38 26" fill="none" stroke="rgba(56,189,248,0.15)" strokeWidth="0.7"/>{[11,18,25,32].map((x,i)=>(<g key={i} transform={`translate(${x},27)`}><circle cx="3" cy="0" r="3.8" fill="#38BDF8" opacity="0.85"/><rect x="0.5" y="5" width="5" height="7" rx="1.5" fill="#38BDF8" opacity="0.6"/><text x="-0.5" y="2.5" fontSize="3.8" fill="#071828" fontWeight="900">PG</text></g>))}</svg>); }
-function IcoVaryPos() { return (<svg viewBox="0 0 48 48" width="34" height="34" fill="none"><circle cx="24" cy="24" r="22" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.28)" strokeWidth="1.2"/><rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="rgba(167,139,250,0.18)" strokeWidth="0.8"/><line x1="24" y1="10" x2="24" y2="38" stroke="rgba(167,139,250,0.1)" strokeWidth="0.6"/><g transform="translate(13,30)"><circle cx="0" cy="0" r="4.5" fill="#A78BFA" opacity="0.9"/><text x="-3" y="1.8" fontSize="4.5" fill="#0a0a1e" fontWeight="900">G</text></g><g transform="translate(24,22)"><circle cx="0" cy="0" r="4" fill="#38BDF8" opacity="0.9"/><text x="-3" y="1.5" fontSize="4" fill="#0a0a1e" fontWeight="900">W</text></g><g transform="translate(35,13)"><circle cx="0" cy="0" r="4" fill="#34D399" opacity="0.9"/><text x="-2.5" y="1.5" fontSize="4" fill="#0a0a1e" fontWeight="900">C</text></g><g transform="translate(15,14)"><circle cx="0" cy="0" r="3.8" fill="#F472B6" opacity="0.9"/><text x="-2.5" y="1.5" fontSize="4" fill="#0a0a1e" fontWeight="900">F</text></g><circle cx="26" cy="34" r="3.5" fill="none" stroke="rgba(251,146,60,0.65)" strokeWidth="1.2"/></svg>); }
-function IcoSimilar() { return (<svg viewBox="0 0 48 48" width="34" height="34" fill="none"><circle cx="24" cy="24" r="22" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.28)" strokeWidth="1.2"/><rect x="10" y="13" width="28" height="22" rx="2" fill="none" stroke="rgba(251,191,36,0.18)" strokeWidth="0.7"/><text x="9" y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text><text x="19" y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text><text x="29" y="28" fontSize="13" fill="#FBBF24" opacity="0.95">★</text>{[13,22,31].map((x,i)=>(<g key={i} transform={`translate(${x},30)`}><circle cx="3" cy="0" r="3.5" fill="#FBBF24" opacity="0.8"/><rect x="0.5" y="5" width="5" height="7" rx="1.5" fill="#FBBF24" opacity="0.6"/></g>))}<text x="20" y="16" fontSize="10" opacity="0.8">🔥</text></svg>); }
-function IcoMixed() { return (<svg viewBox="0 0 48 48" width="34" height="34" fill="none"><circle cx="24" cy="24" r="22" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.28)" strokeWidth="1.2"/><circle cx="14" cy="20" r="6.5" fill="#34D399" opacity="0.9"/><rect x="8.5" y="28" width="11" height="12" rx="2" fill="#34D399" opacity="0.75"/><circle cx="33" cy="23" r="4.5" fill="#38BDF8" opacity="0.8"/><rect x="28.5" y="29" width="9" height="10" rx="1.5" fill="#38BDF8" opacity="0.65"/><path d="M21.5 23.5 C23 20.5 26.5 20.5 28.5 22.5" stroke="rgba(255,255,255,0.38)" strokeWidth="1.5" fill="none" strokeDasharray="2 1.5"/><text x="19" y="16" fontSize="9" fill="#FBBF24" opacity="0.9">↑</text><text x="34.5" y="16" fontSize="9" fill="#60A5FA" opacity="0.75">↓</text></svg>); }
-const MODE_ICONS = { random:IcoRandom,samePos:IcoSamePos,diffPos:IcoVaryPos,sameSkill:IcoSimilar,mixSkill:IcoMixed };
+// ── SVG Mode Icons ─────────────────────────────────────────────────────────────
+function IcoRandom() { return React.createElement('svg',{viewBox:'0 0 48 48',width:34,height:34,fill:'none'},React.createElement('circle',{cx:24,cy:24,r:22,fill:'rgba(56,189,248,0.1)',stroke:'rgba(56,189,248,0.28)',strokeWidth:1.2}),React.createElement('circle',{cx:24,cy:30,r:8.5,fill:'none',stroke:'rgba(251,146,60,0.75)',strokeWidth:1.4}),React.createElement('text',{x:8,y:21,fontSize:13,fill:'#38BDF8',fontWeight:900,opacity:0.95},'?'),React.createElement('text',{x:31,y:16,fontSize:9,fill:'#A78BFA',opacity:0.85},'3'),React.createElement('text',{x:34,y:27,fontSize:11,fill:'#38BDF8',opacity:0.7},'?'),React.createElement('text',{x:14,y:13,fontSize:8,fill:'#2DD4BF',opacity:0.65},'?')); }
+function IcoSamePos() { return React.createElement('svg',{viewBox:'0 0 48 48',width:34,height:34,fill:'none'},React.createElement('circle',{cx:24,cy:24,r:22,fill:'rgba(56,189,248,0.1)',stroke:'rgba(56,189,248,0.28)',strokeWidth:1.2}),...[11,18,25,32].map((x,i)=>React.createElement('g',{key:i,transform:'translate('+x+',27)'},React.createElement('circle',{cx:3,cy:0,r:3.8,fill:'#38BDF8',opacity:0.85}),React.createElement('rect',{x:0.5,y:5,width:5,height:7,rx:1.5,fill:'#38BDF8',opacity:0.6}),React.createElement('text',{x:-0.5,y:2.5,fontSize:3.8,fill:'#071828',fontWeight:900},'PG')))); }
+function IcoVaryPos() { return React.createElement('svg',{viewBox:'0 0 48 48',width:34,height:34,fill:'none'},React.createElement('circle',{cx:24,cy:24,r:22,fill:'rgba(167,139,250,0.1)',stroke:'rgba(167,139,250,0.28)',strokeWidth:1.2}),React.createElement('g',{transform:'translate(13,30)'},React.createElement('circle',{cx:0,cy:0,r:4.5,fill:'#A78BFA',opacity:0.9}),React.createElement('text',{x:-3,y:1.8,fontSize:4.5,fill:'#0a0a1e',fontWeight:900},'G')),React.createElement('g',{transform:'translate(24,22)'},React.createElement('circle',{cx:0,cy:0,r:4,fill:'#38BDF8',opacity:0.9}),React.createElement('text',{x:-3,y:1.5,fontSize:4,fill:'#0a0a1e',fontWeight:900},'W')),React.createElement('g',{transform:'translate(35,13)'},React.createElement('circle',{cx:0,cy:0,r:4,fill:'#34D399',opacity:0.9}),React.createElement('text',{x:-2.5,y:1.5,fontSize:4,fill:'#0a0a1e',fontWeight:900},'C')),React.createElement('g',{transform:'translate(15,14)'},React.createElement('circle',{cx:0,cy:0,r:3.8,fill:'#F472B6',opacity:0.9}),React.createElement('text',{x:-2.5,y:1.5,fontSize:4,fill:'#0a0a1e',fontWeight:900},'F'))); }
+function IcoSimilar() { return React.createElement('svg',{viewBox:'0 0 48 48',width:34,height:34,fill:'none'},React.createElement('circle',{cx:24,cy:24,r:22,fill:'rgba(251,191,36,0.1)',stroke:'rgba(251,191,36,0.28)',strokeWidth:1.2}),React.createElement('text',{x:9,y:28,fontSize:13,fill:'#FBBF24',opacity:0.95},'★'),React.createElement('text',{x:19,y:28,fontSize:13,fill:'#FBBF24',opacity:0.95},'★'),React.createElement('text',{x:29,y:28,fontSize:13,fill:'#FBBF24',opacity:0.95},'★'),React.createElement('text',{x:20,y:16,fontSize:10,opacity:0.8},'🔥')); }
+function IcoMixed() { return React.createElement('svg',{viewBox:'0 0 48 48',width:34,height:34,fill:'none'},React.createElement('circle',{cx:24,cy:24,r:22,fill:'rgba(52,211,153,0.1)',stroke:'rgba(52,211,153,0.28)',strokeWidth:1.2}),React.createElement('circle',{cx:14,cy:20,r:6.5,fill:'#34D399',opacity:0.9}),React.createElement('rect',{x:8.5,y:28,width:11,height:12,rx:2,fill:'#34D399',opacity:0.75}),React.createElement('circle',{cx:33,cy:23,r:4.5,fill:'#38BDF8',opacity:0.8}),React.createElement('rect',{x:28.5,y:29,width:9,height:10,rx:1.5,fill:'#38BDF8',opacity:0.65}),React.createElement('text',{x:19,y:16,fontSize:9,fill:'#FBBF24',opacity:0.9},'↑'),React.createElement('text',{x:34.5,y:16,fontSize:9,fill:'#60A5FA',opacity:0.75},'↓')); }
+const MODE_ICONS = {random:IcoRandom,samePos:IcoSamePos,diffPos:IcoVaryPos,sameSkill:IcoSimilar,mixSkill:IcoMixed};
 
-// ── App ────────────────────────────────────────────────────────────────────────
-function TrainingManager() {
-  const [tab,setTab]=useState("teams");
-  const [screen,setScreen]=useState("home");
-  const [teams,setTeams]=useState(()=>LS.get("tm_teams")||[]);
-  const [ratings,setRatings]=useState(()=>LS.get("tm_ratings")||{});
-  const [sessions,setSessions]=useState(()=>LS.get("tm_sessions")||{});
-  const [selTeam,setSelTeam]=useState(null);
-  const [sessionDate,setSessionDate]=useState(todayStr());
-  const [attendees,setAttendees]=useState(new Set());
-  const [isSaved,setIsSaved]=useState(false);
-  const [groups,setGroups]=useState([]);
-  const [groupConfig,setGroupConfig]=useState("all2");
-  const [groupMode,setGroupMode]=useState("random");
-  const [toast,setToast]=useState(null);
-  const [showCreate,setShowCreate]=useState(false);
-  const [newTeam,setNewTeam]=useState({club:"",league:"",season:"",ageBracket:"",year:String(new Date().getFullYear()),players:[]});
-  const [npName,setNpName]=useState("");
-  const [npNum,setNpNum]=useState("");
-  // Golden Child state
-  const [gcTeams,setGcTeams]=useState([]);
-  const [gcDraw,setGcDraw]=useState(null);
-  const importRef=useRef(null);
-  const groupsRef=useRef(null);
+// ── Main App ───────────────────────────────────────────────────────────────────
+function App() {
+  const [tab,setTab] = useState('teams');
+  const [screen,setScreen] = useState('home');
+  const [teams,setTeams] = useState(()=>LS.get('tm_teams')||[]);
+  const [ratings,setRatings] = useState(()=>LS.get('tm_ratings')||{});
+  const [sessions,setSessions] = useState(()=>LS.get('tm_sessions')||{});
+  const [selTeam,setSelTeam] = useState(null);
+  const [sessionDate,setSessionDate] = useState(todayStr());
+  const [attendees,setAttendees] = useState(new Set());
+  const [isSaved,setIsSaved] = useState(false);
+  const [groups,setGroups] = useState([]);
+  const [groupConfig,setGroupConfig] = useState('all2');
+  const [groupMode,setGroupMode] = useState('random');
+  const [toast,setToast] = useState(null);
+  const [showCreate,setShowCreate] = useState(false);
+  const [newTeam,setNewTeam] = useState({club:'',league:'',season:'',ageBracket:'',year:String(new Date().getFullYear()),players:[]});
+  const [npName,setNpName] = useState('');
+  const [npNum,setNpNum] = useState('');
+  const [gcTeams,setGcTeams] = useState([]);
+  const [gcDraw,setGcDraw] = useState(null);
+  const importRef = useRef(null);
+  const groupsRef = useRef(null);
 
-  const saveTeams=t=>{setTeams(t);LS.set("tm_teams",t);};
-  const saveRatings=r=>{setRatings(r);LS.set("tm_ratings",r);};
-  const saveSessions=s=>{setSessions(s);LS.set("tm_sessions",s);};
-  const showToast=msg=>{setToast(msg);setTimeout(()=>setToast(null),3000);};
+  const saveTeams = t => { setTeams(t); LS.set('tm_teams',t); };
+  const saveRatings = r => { setRatings(r); LS.set('tm_ratings',r); };
+  const saveSess = s => { setSessions(s); LS.set('tm_sessions',s); };
+  const toast_ = msg => { setToast(msg); setTimeout(()=>setToast(null),3000); };
 
-  function onImport(e){
-    const f=e.target.files[0];if(!f)return;e.target.value="";
+  function onImport(e) {
+    const f=e.target.files[0]; if (!f) return; e.target.value='';
     const fr=new FileReader();
-    fr.onload=ev=>{
-      try{
+    fr.onload = ev => {
+      try {
         const data=JSON.parse(ev.target.result);
-        if(!data._squadmgr) throw new Error();
+        if (!data._squadmgr) throw new Error();
         const next=[...teams];
-        for(const team of(data.teams||[])){const i=next.findIndex(t=>t.id===team.id);if(i>=0)next[i]=team;else next.push(team);}
+        (data.teams||[]).forEach(team=>{ const i=next.findIndex(t=>t.id===team.id); if(i>=0) next[i]=team; else next.push(team); });
         saveTeams(next);
-        if(data.ratings) saveRatings({...ratings,...data.ratings});
-        showToast(`✓ Imported ${data.teams?.length||0} team(s)`);
-      }catch{showToast("⚠ Invalid Squad Manager file");}
+        if (data.ratings) saveRatings(Object.assign({},ratings,data.ratings));
+        toast_('✓ Imported '+(data.teams||[]).length+' team(s)');
+      } catch(e) { toast_('⚠ Invalid Squad Manager file'); }
     };
     fr.readAsText(f);
   }
 
-  function onExport(){
-    const data={_squadmgr:true,version:2,teams,ratings};
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  function onExport() {
+    const blob=new Blob([JSON.stringify({_squadmgr:true,version:2,teams,ratings},null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");a.href=url;a.download=`squad-manager-teams-${todayStr()}.json`;a.click();
+    const a=document.createElement('a'); a.href=url; a.download='squad-manager-teams-'+todayStr()+'.json'; a.click();
     URL.revokeObjectURL(url);
-    showToast("✓ Exported to Squad Manager format");
+    toast_('✓ Exported to Squad Manager format');
   }
 
-  function addPlayer(){
-    if(!npName.trim()) return;
-    const parts=npName.trim().split(" ");
-    const p={id:uid(),firstName:parts[0],lastName:parts.slice(1).join(" "),nickname:parts[0],singletNumber:npNum.trim()||"0"};
-    setNewTeam(t=>{return {...t,players:[...t.players,p]};});
-    setNpName("");setNpNum("");
+  function addPlayer() {
+    if (!npName.trim()) return;
+    const parts=npName.trim().split(' ');
+    const p={id:uid(),firstName:parts[0],lastName:parts.slice(1).join(' '),nickname:parts[0],singletNumber:npNum.trim()||'0'};
+    setNewTeam(t=>Object.assign({},t,{players:[...t.players,p]}));
+    setNpName(''); setNpNum('');
   }
-  function createTeam(){
-    if(!newTeam.club.trim()){showToast("⚠ Team name required");return;}
-    saveTeams([...teams,{...newTeam,id:uid()}]);
+  function createTeam() {
+    if (!newTeam.club.trim()) { toast_('⚠ Team name required'); return; }
+    saveTeams([...teams,Object.assign({},newTeam,{id:uid()})]);
     setShowCreate(false);
-    setNewTeam({club:"",league:"",season:"",ageBracket:"",year:String(new Date().getFullYear()),players:[]});
-    showToast("✓ Team created");
+    setNewTeam({club:'',league:'',season:'',ageBracket:'',year:String(new Date().getFullYear()),players:[]});
+    toast_('✓ Team created');
   }
 
-  function openSession(team){
+  function openSession(team) {
     setSelTeam(team);
-    const date=todayStr();setSessionDate(date);
-    const prev=sessions[team.id]?.[date];
-    setAttendees(prev?new Set(prev):new Set(team.players.map(p=>p.id)));
+    const date=todayStr(); setSessionDate(date);
+    const prev=(sessions[team.id]||{})[date];
+    setAttendees(prev ? new Set(prev) : new Set(team.players.map(p=>p.id)));
     setIsSaved(!!prev);
-    setGroups([]);setGroupConfig("all2");setGroupMode("random");
-    setScreen("session");
+    setGroups([]); setGroupConfig('all2'); setGroupMode('random');
+    setScreen('session');
   }
-  function changeDate(date){
+  function changeDate(date) {
     setSessionDate(date);
-    const prev=sessions[selTeam?.id]?.[date];
-    setAttendees(prev?new Set(prev):new Set(selTeam?.players.map(p=>p.id)||[]));
+    const prev=((sessions[selTeam&&selTeam.id])||{})[date];
+    setAttendees(prev ? new Set(prev) : new Set((selTeam&&selTeam.players||[]).map(p=>p.id)));
     setIsSaved(!!prev);
   }
-  function togglePlayer(id){setAttendees(s=>{const n=new Set(s);n.has(id)?n.delete(id):n.add(id);return n;});setIsSaved(false);}
-  function markAll(v){setAttendees(v?new Set(selTeam.players.map(p=>p.id)):new Set());setIsSaved(false);}
-  function saveAtt(){
-    const ns={...sessions,[selTeam.id]:{...(sessions[selTeam.id]||{}),[sessionDate]:[...attendees]}};
-    saveSessions(ns);setIsSaved(true);showToast("✓ Attendance saved");
+  function togglePlayer(id) { setAttendees(s=>{ const n=new Set(s); n.has(id)?n.delete(id):n.add(id); return n; }); setIsSaved(false); }
+  function markAll(v) { setAttendees(v ? new Set(selTeam.players.map(p=>p.id)) : new Set()); setIsSaved(false); }
+  function saveAtt() {
+    const ns=Object.assign({},sessions);
+    if (!ns[selTeam.id]) ns[selTeam.id]={};
+    ns[selTeam.id][sessionDate]=[...attendees];
+    saveSess(ns); setIsSaved(true); toast_('✓ Attendance saved');
   }
-  function deleteSession(teamId,date){
-    const ts={...sessions};
-    if(ts[teamId]){delete ts[teamId][date];if(!Object.keys(ts[teamId]).length) delete ts[teamId];}
-    saveSessions(ts);showToast("✓ Session deleted");
+  function deleteSess(teamId, date) {
+    const ns=Object.assign({},sessions);
+    if (ns[teamId]) { delete ns[teamId][date]; if (!Object.keys(ns[teamId]).length) delete ns[teamId]; }
+    saveSess(ns); toast_('✓ Session deleted');
   }
 
-  function goGroups(){
-    if(attendees.size<2){showToast("⚠ Need at least 2 players");return;}
-    setGroups([]);setGroupConfig("all2");setGroupMode("random");
-    setScreen("groups");
-    setTimeout(()=>groupsRef.current?.scrollTo({top:0,behavior:"instant"}),30);
+  function goGroups() {
+    if (attendees.size<2) { toast_('⚠ Need at least 2 players'); return; }
+    setGroups([]); setGroupConfig('all2'); setGroupMode('random');
+    setScreen('groups');
+    setTimeout(()=>groupsRef.current&&groupsRef.current.scrollTo({top:0,behavior:'instant'}),30);
   }
-  function genGroups(cfg=groupConfig,mode=groupMode){
+  function genGroups(cfg, mode) {
+    cfg=cfg||groupConfig; mode=mode||groupMode;
     const present=selTeam.players.filter(p=>attendees.has(p.id));
-    if(present.length<2){showToast("⚠ Need at least 2 players");return;}
+    if (present.length<2) { toast_('⚠ Need at least 2 players'); return; }
     setGroups(makeGroups(present,cfg,mode,ratings,selTeam.id));
   }
-  function onCfgChange(cfg){setGroupConfig(cfg);if(groups.length) genGroups(cfg,groupMode);}
-  function onModeChange(mode){setGroupMode(mode);if(groups.length) genGroups(groupConfig,mode);}
+  function onCfgChange(cfg) { setGroupConfig(cfg); if (groups.length) genGroups(cfg,groupMode); }
+  function onModeChange(mode) { setGroupMode(mode); if (groups.length) genGroups(groupConfig,mode); }
 
-  // Golden Child
-  function goGoldenChild(){
+  function goGoldenChild() {
     const present=selTeam.players.filter(p=>attendees.has(p.id));
-    if(present.length<2){showToast("⚠ Need at least 2 players");return;}
-    const shuffled=shuffle(present);
-    const half=Math.floor(shuffled.length/2);
-    const a=shuffled.slice(0,half+shuffled.length%2); // bigger half if odd
-    const b=shuffled.slice(half+shuffled.length%2);
-    // Assign numbers — shared pool 1..max(a,b)
-    // If uneven, last player in the bigger group gets an extra number
-    const maxLen=Math.max(a.length,b.length);
-    // players in both teams get numbers 1..min(a,b). Extra player gets two numbers.
-    setGcTeams([a,b]);
+    if (present.length<2) { toast_('⚠ Need at least 2 players'); return; }
+    const s=shuffle(present);
+    const splitAt=Math.ceil(s.length/2);
+    setGcTeams([s.slice(0,splitAt), s.slice(splitAt)]);
     setGcDraw(null);
-    setScreen("golden");
+    setScreen('golden');
   }
-  function gcDrawRound(){
-    const maxNum=Math.max(gcTeams[0].length,gcTeams[1].length);
-    // pick a random subset size 1..maxNum
+  function gcDraw_() {
+    const maxNum=Math.max(gcTeams[0].length, gcTeams[1].length);
     const count=Math.ceil(Math.random()*maxNum);
-    // pick 'count' random numbers from 1..maxNum without replacement
     const pool=Array.from({length:maxNum},(_,i)=>i+1);
     const drawn=shuffle(pool).slice(0,count).sort((a,b)=>a-b);
     setGcDraw(drawn);
   }
 
-  const pPos=(p,team)=>{const r=ratings[`${team?.id}_${p.id}`];return r?POSITIONS[r.position]||"—":"—";};
-  const pOverall=(p,team)=>calcOverall(ratings[`${team?.id}_${p.id}`]);
+  const pPos=(p,team)=>{ const r=ratings&&ratings[(team&&team.id||'')+'_'+p.id]; return r ? (POSITIONS[r.position]||'—') : '—'; };
+  const pOvr=(p,team)=>calcOverall(ratings&&ratings[(team&&team.id||'')+'_'+p.id]);
 
-  function teamHistory(team){
-    if(!team||!sessions[team.id]) return [];
-    return Object.entries(sessions[team.id]).map(([date,ids])=>{return {date,ids,count:ids.length};}).sort((a,b)=>b.date.localeCompare(a.date));
+  function teamHist(team) {
+    if (!team||!sessions[team.id]) return [];
+    return Object.entries(sessions[team.id]).map(([date,ids])=>({date,ids,count:ids.length})).sort((a,b)=>b.date.localeCompare(a.date));
   }
-  function playerAttStats(team){
-    if(!team||!sessions[team.id]) return {};
-    const hist=teamHistory(team);
+  function playerAttStats(team) {
     const stats={};
-    team.players.forEach(p=>{stats[p.id]=0;});
-    hist.forEach({ids})=>{ids.forEach(id=>{if(stats[id]!==undefined) stats[id]++;})});
+    team.players.forEach(p=>{ stats[p.id]=0; });
+    teamHist(team).forEach(h=>{ h.ids.forEach(id=>{ if (stats[id]!==undefined) stats[id]++; }); });
     return stats;
   }
-  function getMissedRecent(team){
-    const hist=teamHistory(team);
-    if(hist.length<2) return new Set();
+  function getMissedRecent(team) {
+    const hist=teamHist(team);
+    if (hist.length<2) return new Set();
     const recent=hist.slice(0,2);
     const missed=new Set();
-    team.players.forEach(p=>{
-      const missedBoth=recent.every(s=>!s.ids.includes(p.id));
-      if(missedBoth) missed.add(p.id);
-    });
+    team.players.forEach(p=>{ if (recent.every(s=>!s.ids.includes(p.id))) missed.add(p.id); });
     return missed;
   }
 
   const attCount=attendees.size;
-  const totalCount=selTeam?.players.length||0;
+  const totalCount=selTeam ? selTeam.players.length : 0;
   const presentCfg=ALL_CFGS.find(c=>c.id===groupConfig);
-
-  // Compute max number for Golden Child
-  const gcMaxNum=gcTeams.length?Math.max(gcTeams[0].length,gcTeams[1].length):0;
+  const gcMaxNum=gcTeams.length ? Math.max(gcTeams[0].length,gcTeams[1].length) : 0;
 
   return (
     <div className="app">
       <div className="orb1"/><div className="orb2"/>
-      <input type="file" accept=".json" ref={importRef} style={{display:"none"}} onChange={onImport}/>
+      <input type="file" accept=".json" ref={importRef} style={{display:'none'}} onChange={onImport}/>
 
       {/* HOME */}
-      {screen==="home" && (
-        <>
-          <div className="hdr">
-            <div className="hdr-logo">🏀</div>
-            <div className="hdr-titles"><div className="hdr-title">Training Manager</div></div>
-          </div>
-          <div className="screen">
-            <div className="screen-inner">
-              {tab==="teams" && (
-                <>
-                  <div className="hero"><div className="hero-greeting">Ready to train?</div><div className="hero-title">Your <span className="hero-teal">Teams</span></div></div>
-                  <div className="action-row">
-                    <button className="action-btn" onClick={()=>importRef.current?.click()}><span className="action-icon">📥</span><div><div className="action-lbl">Import</div><div className="action-sub">From Squad Manager</div></div></button>
-                    <button className="action-btn" onClick={onExport} disabled={!teams.length}><span className="action-icon">📤</span><div><div className="action-lbl">Export</div><div className="action-sub">To Squad Manager</div></div></button>
-                  </div>
-                  <div className="sect">
-                    <div className="sect-lbl">Your Teams</div>
-                    {teams.length===0 ? (
-                      <div className="empty"><div className="empty-icon">🏀</div><div className="empty-title">No Teams Yet</div><div className="empty-desc">Import from Squad Manager or create a new team.</div></div>
-                    ) : teams.map(team=>(
-                      <div key={team.id} className="card team-card card-clickable" onClick={()=>openSession(team)}>
-                        <div className="team-badge">{(team.ageBracket||"").replace(/[^0-9]/g,"")||"🏀"}</div>
-                        <div className="team-info"><div className="team-name">{team.club}</div><div className="team-meta">{[team.league,team.season,team.ageBracket].filter(Boolean).join(" · ")}</div></div>
-                        <div><div className="team-count">{team.players.length}</div><div className="team-count-lbl">Players</div></div>
-                        <div className="team-arr">›</div>
-                      </div>
-                    ))}
-                    <div style={{marginTop:14}}><button className="btn btn-secondary" style={{width:"100%"}} onClick={()=>setShowCreate(true)}>+ Create New Team</button></div>
-                  </div>
-                </>
-              )}
-
-              {tab==="history" && (
-                <>
-                  <div className="hero"><div className="hero-greeting">Track your progress</div><div className="hero-title">Attendance <span className="hero-teal">History</span></div></div>
-                  {teams.length===0||teams.every(t=>!teamHistory(t).length) ? (
-                    <div className="empty"><div className="empty-icon">📋</div><div className="empty-title">No History Yet</div><div className="empty-desc">Start a training session to begin tracking attendance.</div></div>
-                  ) : teams.map(team=>{
-                    const hist=teamHistory(team);
-                    if(!hist.length) return null;
-                    const attStats=playerAttStats(team);
-                    const missedRecent=getMissedRecent(team);
-                    return (
-                      <div key={team.id}>
-                        <div className="sect" style={{marginBottom:12}}><div className="sect-lbl">{team.club}</div></div>
-                        {/* Player attendance summary */}
-                        {team.players.length>0 && (
-                          <div className="player-att-grid">
-                            {team.players.map(p=>{
-                              const cnt=attStats[p.id]||0;
-                              const missed=missedRecent.has(p.id);
-                              return (
-                                <div key={p.id} className={"player-att-card"+(missed?" missed-recent":"")}>
-                                  <div className="pac-info">
-                                    <div className="pac-name">{p.nickname||p.firstName}</div>
-                                    <div className="pac-sessions">{cnt} session{cnt!==1?"s":""}</div>
-                                  </div>
-                                  <div className={"pac-badge"+(missed?" missed":"")}>{cnt}</div>
-                                  {missed && <div className="pac-miss-icon" title="Missed last 2 sessions">⚠️</div>}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                        <div style={{padding:"0 20px"}}>
-                          {hist.map(({date,ids,count})=>{
-                            const r1=hist[0]?.date===date;
-                            const r2=hist[1]?.date===date;
-                            return (
-                              <SwipeHistRow key={date} team={team} date={date} ids={ids} count={count}
-                                missedRecent={false}
-                                onDelete={()=>deleteSession(team.id,date)}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-            </div>
-          </div>
-          <nav className="bot-nav">
-            <button className={`nav-btn ${tab==="teams"?"active":""}`} onClick={()=>setTab("teams")}><span className="nav-icon">🏀</span><span className="nav-lbl">Teams</span></button>
-            <button className={`nav-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}><span className="nav-icon">📋</span><span className="nav-lbl">History</span></button>
-          </nav>
-        </>
-      )}
-
-      {/* SESSION / ROLL CALL */}
-      {screen==="session" && selTeam && (
-        <>
-          <div className="hdr">
-            <button className="btn-back" onClick={()=>setScreen("home")}>‹</button>
-            <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>{selTeam.club}</div><div className="hdr-sub">{[selTeam.league,selTeam.ageBracket].filter(Boolean).join(" · ")}</div></div>
-            <button className={`btn ${isSaved?"btn-saved":"btn-primary"}`} style={{height:36,fontSize:13,padding:"0 14px",minWidth:92}} onClick={saveAtt}>{isSaved?"✓ Saved":"💾 Save"}</button>
-          </div>
-          <div className="screen">
-            <div className="screen-inner">
-              <div className="date-row"><span className="date-icon">📅</span><span className="date-lbl">Training Date</span><input type="date" value={sessionDate} onChange={e=>changeDate(e.target.value)}/></div>
-              <div className="att-stats">
-                <div className="att-stat"><div className="att-num">{attCount}</div><div className="att-lbl">Present</div></div>
-                <div className="att-stat"><div className="att-num absent">{totalCount-attCount}</div><div className="att-lbl">Absent</div></div>
-                <div className="att-stat"><div className="att-num total">{totalCount}</div><div className="att-lbl">Total</div></div>
-              </div>
-              <div className="sect">
-                <div className="btn-row" style={{marginBottom:12}}>
-                  <button className="btn btn-ghost" onClick={()=>markAll(true)}>✓ All Present</button>
-                  <button className="btn btn-ghost" onClick={()=>markAll(false)}>✗ All Absent</button>
-                </div>
-                {/* Generate Groups button at top */}
-                <button className="btn btn-primary" style={{width:"100%",marginBottom:16}} onClick={goGroups}>Generate Groups →</button>
-                {selTeam.players.map(player=>{
-                  const present=attendees.has(player.id);
-                  const pos=pPos(player,selTeam);const ovr=pOverall(player,selTeam);
-                  return (
-                    <div key={player.id} className={`player-row ${present?"present":"absent"}`} onClick={()=>togglePlayer(player.id)}>
-                      <div className="p-num">#{player.singletNumber}</div>
-                      <div className="p-info">
-                        <div className="p-name">{player.nickname||player.firstName}</div>
-                        <div className="p-meta"><span>{player.firstName} {player.lastName}</span>{pos!=="—"&&<span>· {pos}</span>}{ovr!==null&&<span>· OVR {ovr}</span>}</div>
-                      </div>
-                      <div className="p-check">{present&&<span className="check-tick">✓</span>}</div>
-                    </div>
-                  );
-                })}
-                <div style={{marginTop:16}}><button className="btn btn-primary" style={{width:"100%"}} onClick={goGroups}>Generate Groups →</button></div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* GROUPS */}
-      {screen==="groups" && selTeam && (
-        <>
-          <div className="hdr">
-            <button className="btn-back" onClick={()=>setScreen("session")}>‹</button>
-            <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>Group Generator</div><div className="hdr-sub">{attCount} players · {selTeam.club}</div></div>
-            <button className={`btn ${isSaved?"btn-saved":"btn-secondary"}`} style={{height:36,fontSize:13,padding:"0 12px",minWidth:84}} onClick={saveAtt}>{isSaved?"✓ Saved":"💾 Save"}</button>
-          </div>
-          <div className="screen" ref={groupsRef}>
-            <div className="screen-inner">
-              <div className="cfg-section">
-                <div className="sect-lbl" style={{padding:0,marginBottom:14}}>Group Type</div>
-                <div className="cfg-row-label">All Players — by size</div>
-                <div className="cfg-row" style={{marginBottom:12}}>
-                  {ALL_CONFIGS.map(c=>(<button key={c.id} className={`cfg-btn ${groupConfig===c.id?"active":""}`} onClick={()=>onCfgChange(c.id)}><div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div></button>))}
-                </div>
-                <div className="cfg-row-label">All Players — by count</div>
-                <div className="cfg-row" style={{marginBottom:12}}>
-                  {NUM_CONFIGS.map(c=>(<button key={c.id} className={`cfg-btn ${groupConfig===c.id?"active":""}`} onClick={()=>onCfgChange(c.id)}><div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div></button>))}
-                </div>
-                <div className="cfg-row-label">Single Group</div>
-                <div className="cfg-row">
-                  {ONE_CONFIGS.map(c=>(<button key={c.id} className={`cfg-btn ${groupConfig===c.id?"active":""}`} onClick={()=>onCfgChange(c.id)}><div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div></button>))}
-                </div>
-              </div>
-              <div className="sect" style={{marginBottom:10}}><div className="sect-lbl">Group Method</div></div>
-              <div className="mode-row">
-                {MODES.map(m=>{const Icon=MODE_ICONS[m.id];return(<button key={m.id} className={`mode-card ${groupMode===m.id?"active":""}`} onClick={()=>onModeChange(m.id)}><Icon/><div className="mode-lbl">{m.label}</div></button>);})}
-              </div>
-              <div className="gen-section">
-                <button className="btn btn-primary" style={{flex:1}} onClick={()=>genGroups()}>{groups.length?"🔄 Regenerate":"⚡ Generate Groups"}</button>
-                <button className="btn btn-gold" style={{flex:1}} onClick={goGoldenChild}>👑 Golden Child</button>
-              </div>
-              {groups.length===0 ? (
-                <div className="gen-empty"><div className="gen-empty-icon">⚡</div><div className="gen-empty-title">Ready to generate</div><div className="gen-empty-sub">Pick your group type and method above,<br/>then tap Generate Groups</div></div>
-              ) : (
-                <>
-                  <div className="sect" style={{marginBottom:12}}><div className="sect-lbl">{groups.length} Group{groups.length!==1?"s":""} · {presentCfg?.full}</div></div>
-                  <div className="groups-list">
-                    {groups.map((group,gi)=>(
-                      <div key={gi} className="group-card" style={{animationDelay:`${gi*55}ms`}}>
-                        <div className="group-hdr"><span className="group-num" style={{color:GROUP_COLORS[gi%GROUP_COLORS.length]}}>Group {gi+1}</span><span className="group-sz">{group.length} player{group.length!==1?"s":""}</span></div>
-                        <div className="group-players">
-                          {group.map((player,pi)=>{const color=CHIP_COLORS[(gi*5+pi)%CHIP_COLORS.length];const pos=pPos(player,selTeam);return(<div key={player.id} className="p-chip"><div className="chip-dot" style={{background:color}}/><span className="chip-num">#{player.singletNumber}</span><span className="chip-name">{player.nickname||player.firstName}</span>{pos!=="—"&&<span className="chip-pos">{pos}</span>}</div>);})}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* GOLDEN CHILD */}
-      {screen==="golden" && selTeam && gcTeams.length===2 && (
-        <>
-          <div className="hdr">
-            <button className="btn-back" onClick={()=>setScreen("groups")}>‹</button>
-            <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>👑 Golden Child</div><div className="hdr-sub">{gcTeams[0].length+gcTeams[1].length} players · {selTeam.club}</div></div>
-          </div>
-          <div className="screen">
-            <div className="screen-inner">
-              <div className="gc-teams">
-                {gcTeams.map((team,ti)=>{
-                  const [col,bg,bdr]=TEAM_COLORS[ti];
-                  return (
-                    <div key={ti} className="gc-team" style={{border:`1px solid ${bdr}`}}>
-                      <div className="gc-team-hdr" style={{background:bg}}>
-                        <span className="gc-team-name" style={{color:col}}>Team {ti===0?"A":"B"}</span>
-                        <span style={{fontSize:11,color:"var(--muted)"}}>{team.length} players</span>
-                      </div>
-                      <div className="gc-players">
-                        {team.map((player,pi)=>{
-                          const num=pi+1;
-                          // If this team is bigger (uneven), last player gets two numbers
-                          const otherLen=gcTeams[1-ti].length;
-                          const isExtra=ti===0&&gcTeams[0].length>gcTeams[1].length&&pi===team.length-1;
-                          const numLabel=isExtra?`${otherLen+1}/${num}`:`${num}`;
-                          const isDrawn=gcDraw&&gcDraw.includes(num);
-                          const isExtraDrawn=isExtra&&gcDraw&&(gcDraw.includes(otherLen+1)||gcDraw.includes(num));
-                          const highlight=gcDraw&&(isDrawn||isExtraDrawn);
-                          return (
-                            <div key={player.id} className="gc-player-row" style={{opacity:gcDraw&&!highlight?0.35:1,transition:"opacity 0.3s"}}>
-                              <div className="gc-num-badge" style={{color:highlight?col:"var(--muted)"}}>{numLabel}</div>
-                              <div className="gc-player-name" style={{color:highlight?col:"var(--text)"}}>{player.nickname||player.firstName}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="gc-draw-section">
-                <button className="btn btn-gold" style={{width:"100%"}} onClick={gcDrawRound}>
-                  {gcDraw?"🔄 Draw Again":"🎲 Draw Numbers"}
+      {screen==='home' && <>
+        <div className="hdr">
+          <div className="hdr-logo">🏀</div>
+          <div className="hdr-titles"><div className="hdr-title">Training Manager</div></div>
+        </div>
+        <div className="screen">
+          <div className="screen-inner">
+            {tab==='teams' && <>
+              <div className="hero"><div className="hero-greeting">Ready to train?</div><div className="hero-title">Your <span className="hero-teal">Teams</span></div></div>
+              <div className="action-row">
+                <button className="action-btn" onClick={()=>importRef.current&&importRef.current.click()}>
+                  <span className="action-icon">📥</span><div><div className="action-lbl">Import</div><div className="action-sub">From Squad Manager</div></div>
+                </button>
+                <button className="action-btn" onClick={onExport} disabled={!teams.length}>
+                  <span className="action-icon">📤</span><div><div className="action-lbl">Export</div><div className="action-sub">To Squad Manager</div></div>
                 </button>
               </div>
-              {gcDraw && (
-                <div className="gc-result">
-                  <div className="gc-result-lbl">{gcDraw.length===gcMaxNum?"All players play!":gcDraw.length===1?"This number plays:":"These numbers play:"}</div>
-                  <div className="gc-result-nums">
-                    {gcDraw.map(n=>(
-                      <div key={n} className="gc-result-num" style={{color:CHIP_COLORS[n%CHIP_COLORS.length]}}>{n}</div>
-                    ))}
+              <div className="sect">
+                <div className="sect-lbl">Your Teams</div>
+                {teams.length===0 ? (
+                  <div className="empty"><div className="empty-icon">🏀</div><div className="empty-title">No Teams Yet</div><div className="empty-desc">Import from Squad Manager or create a new team.</div></div>
+                ) : teams.map(team=>(
+                  <div key={team.id} className="card team-card card-clickable" onClick={()=>openSession(team)}>
+                    <div className="team-badge">{(team.ageBracket||'').replace(/[^0-9]/g,'')||'🏀'}</div>
+                    <div className="team-info"><div className="team-name">{team.club}</div><div className="team-meta">{[team.league,team.season,team.ageBracket].filter(Boolean).join(' · ')}</div></div>
+                    <div><div className="team-count">{team.players.length}</div><div className="team-count-lbl">Players</div></div>
+                    <div className="team-arr">›</div>
                   </div>
-                  <div className="gc-result-desc">Player{gcDraw.length>1?"s":""} numbered {gcDraw.join(", ")} from each team</div>
-                </div>
-              )}
-              <div style={{padding:"0 20px"}}>
-                <button className="btn btn-secondary" style={{width:"100%"}} onClick={goGoldenChild}>🔀 Reshuffle Teams</button>
+                ))}
+                <div style={{marginTop:14}}><button className="btn btn-secondary" style={{width:'100%'}} onClick={()=>setShowCreate(true)}>+ Create New Team</button></div>
               </div>
+            </>}
+
+            {tab==='history' && <>
+              <div className="hero"><div className="hero-greeting">Track your progress</div><div className="hero-title">Attendance <span className="hero-teal">History</span></div></div>
+              {teams.length===0||teams.every(t=>!teamHist(t).length) ? (
+                <div className="empty"><div className="empty-icon">📋</div><div className="empty-title">No History Yet</div><div className="empty-desc">Start a training session to begin tracking attendance.</div></div>
+              ) : teams.map(team=>{
+                const hist=teamHist(team);
+                if (!hist.length) return null;
+                const stats=playerAttStats(team);
+                const missed=getMissedRecent(team);
+                return (
+                  <div key={team.id}>
+                    <div className="sect" style={{marginBottom:10}}><div className="sect-lbl">{team.club}</div></div>
+                    <div className="player-att-grid">
+                      {team.players.map(p=>{
+                        const cnt=stats[p.id]||0;
+                        const isMissed=missed.has(p.id);
+                        return (
+                          <div key={p.id} className={'pac'+(isMissed?' missed':'')}>
+                            <div className="pac-info">
+                              <div className="pac-name">{p.nickname||p.firstName}</div>
+                              <div className="pac-sub">{cnt} session{cnt!==1?'s':''}{isMissed?' · ⚠️ missed last 2':''}</div>
+                            </div>
+                            <div className={'pac-count'+(isMissed?' missed':'')}>{cnt}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div style={{padding:'0 20px'}}>
+                      {hist.map(h=>(
+                        <SwipeRow key={h.date} team={team} date={h.date} ids={h.ids} count={h.count} onDelete={()=>deleteSess(team.id,h.date)}/>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </>}
+          </div>
+        </div>
+        <nav className="bot-nav">
+          <button className={'nav-btn'+(tab==='teams'?' active':'')} onClick={()=>setTab('teams')}><span className="nav-icon">🏀</span><span className="nav-lbl">Teams</span></button>
+          <button className={'nav-btn'+(tab==='history'?' active':'')} onClick={()=>setTab('history')}><span className="nav-icon">📋</span><span className="nav-lbl">History</span></button>
+        </nav>
+      </>}
+
+      {/* SESSION */}
+      {screen==='session' && selTeam && <>
+        <div className="hdr">
+          <button className="btn-back" onClick={()=>setScreen('home')}>‹</button>
+          <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>{selTeam.club}</div><div className="hdr-sub">{[selTeam.league,selTeam.ageBracket].filter(Boolean).join(' · ')}</div></div>
+          <button className={'btn '+(isSaved?'btn-saved':'btn-primary')} style={{height:36,fontSize:13,padding:'0 14px',minWidth:92}} onClick={saveAtt}>{isSaved?'✓ Saved':'💾 Save'}</button>
+        </div>
+        <div className="screen">
+          <div className="screen-inner">
+            <div className="date-row"><span style={{fontSize:17}}>📅</span><span className="date-lbl">Training Date</span><input type="date" value={sessionDate} onChange={e=>changeDate(e.target.value)}/></div>
+            <div className="att-stats">
+              <div className="att-stat"><div className="att-num">{attCount}</div><div className="att-lbl">Present</div></div>
+              <div className="att-stat"><div className="att-num absent">{totalCount-attCount}</div><div className="att-lbl">Absent</div></div>
+              <div className="att-stat"><div className="att-num total">{totalCount}</div><div className="att-lbl">Total</div></div>
+            </div>
+            <div className="sect">
+              <div className="btn-row" style={{marginBottom:12}}>
+                <button className="btn btn-ghost" onClick={()=>markAll(true)}>✓ All Present</button>
+                <button className="btn btn-ghost" onClick={()=>markAll(false)}>✗ All Absent</button>
+              </div>
+              {/* Generate button — TOP */}
+              <button className="btn btn-primary" style={{width:'100%',marginBottom:14}} onClick={goGroups}>Generate Groups →</button>
+              {selTeam.players.map(player=>{
+                const present=attendees.has(player.id);
+                const pos=pPos(player,selTeam); const ovr=pOvr(player,selTeam);
+                return (
+                  <div key={player.id} className={'player-row '+(present?'present':'absent')} onClick={()=>togglePlayer(player.id)}>
+                    <div className="p-num">#{player.singletNumber}</div>
+                    <div className="p-info">
+                      <div className="p-name">{player.nickname||player.firstName}</div>
+                      <div className="p-meta"><span>{player.firstName} {player.lastName}</span>{pos!=='—'&&<span>· {pos}</span>}{ovr!==null&&<span>· OVR {ovr}</span>}</div>
+                    </div>
+                    <div className="p-check">{present&&<span className="check-tick">✓</span>}</div>
+                  </div>
+                );
+              })}
+              {/* Generate button — BOTTOM */}
+              <div style={{marginTop:16}}><button className="btn btn-primary" style={{width:'100%'}} onClick={goGroups}>Generate Groups →</button></div>
             </div>
           </div>
-        </>
-      )}
+        </div>
+      </>}
+
+      {/* GROUPS */}
+      {screen==='groups' && selTeam && <>
+        <div className="hdr">
+          <button className="btn-back" onClick={()=>setScreen('session')}>‹</button>
+          <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>Group Generator</div><div className="hdr-sub">{attCount} players · {selTeam.club}</div></div>
+          <button className={'btn '+(isSaved?'btn-saved':'btn-secondary')} style={{height:36,fontSize:13,padding:'0 12px',minWidth:84}} onClick={saveAtt}>{isSaved?'✓ Saved':'💾 Save'}</button>
+        </div>
+        <div className="screen" ref={groupsRef}>
+          <div className="screen-inner">
+            <div className="cfg-section">
+              <div className="sect-lbl" style={{padding:0,marginBottom:14}}>Group Type</div>
+              <div className="cfg-row-label">All Players — by size</div>
+              <div className="cfg-row" style={{marginBottom:12}}>
+                {ALL_CONFIGS.map(c=>(
+                  <button key={c.id} className={'cfg-btn'+(groupConfig===c.id?' active':'')} onClick={()=>onCfgChange(c.id)}>
+                    <div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div>
+                  </button>
+                ))}
+              </div>
+              <div className="cfg-row-label">All Players — by count</div>
+              <div className="cfg-row" style={{marginBottom:12}}>
+                {NUM_CONFIGS.map(c=>(
+                  <button key={c.id} className={'cfg-btn'+(groupConfig===c.id?' active':'')} onClick={()=>onCfgChange(c.id)}>
+                    <div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div>
+                  </button>
+                ))}
+              </div>
+              <div className="cfg-row-label">Single Group</div>
+              <div className="cfg-row">
+                {ONE_CONFIGS.map(c=>(
+                  <button key={c.id} className={'cfg-btn'+(groupConfig===c.id?' active':'')} onClick={()=>onCfgChange(c.id)}>
+                    <div className="cfg-num">{c.label}</div><div className="cfg-sub">{c.sub}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="sect" style={{marginBottom:10}}><div className="sect-lbl">Group Method</div></div>
+            <div className="mode-row">
+              {MODES.map(m=>{ const Icon=MODE_ICONS[m.id]; return (
+                <button key={m.id} className={'mode-card'+(groupMode===m.id?' active':'')} onClick={()=>onModeChange(m.id)}>
+                  {React.createElement(Icon)}<div className="mode-lbl">{m.label}</div>
+                </button>
+              ); })}
+            </div>
+            <div style={{padding:'0 20px',marginBottom:10}}>
+              <button className="btn btn-primary" style={{width:'100%',marginBottom:10}} onClick={()=>genGroups()}>{groups.length?'🔄 Regenerate Groups':'⚡ Generate Groups'}</button>
+              <button className="btn btn-gold" style={{width:'100%'}} onClick={goGoldenChild}>👑 Golden Child</button>
+            </div>
+            {groups.length===0 ? (
+              <div className="gen-empty"><div className="gen-empty-icon">⚡</div><div className="gen-empty-title">Ready to generate</div><div className="gen-empty-sub">Pick type and method above,<br/>then tap Generate Groups</div></div>
+            ) : <>
+              <div className="sect" style={{marginBottom:12}}><div className="sect-lbl">{groups.length} Group{groups.length!==1?'s':''} · {presentCfg&&presentCfg.full}</div></div>
+              <div className="groups-list">
+                {groups.map((group,gi)=>(
+                  <div key={gi} className="group-card" style={{animationDelay:(gi*55)+'ms'}}>
+                    <div className="group-hdr"><span className="group-num" style={{color:GROUP_COLORS[gi%GROUP_COLORS.length]}}>Group {gi+1}</span><span className="group-sz">{group.length} player{group.length!==1?'s':''}</span></div>
+                    <div className="group-players">
+                      {group.map((player,pi)=>{ const color=CHIP_COLORS[(gi*5+pi)%CHIP_COLORS.length]; const pos=pPos(player,selTeam); return (
+                        <div key={player.id} className="p-chip">
+                          <div className="chip-dot" style={{background:color}}/>
+                          <span className="chip-num">#{player.singletNumber}</span>
+                          <span className="chip-name">{player.nickname||player.firstName}</span>
+                          {pos!=='—'&&<span className="chip-pos">{pos}</span>}
+                        </div>
+                      ); })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>}
+          </div>
+        </div>
+      </>}
+
+      {/* GOLDEN CHILD */}
+      {screen==='golden' && selTeam && gcTeams.length===2 && <>
+        <div className="hdr">
+          <button className="btn-back" onClick={()=>setScreen('groups')}>‹</button>
+          <div className="hdr-titles"><div className="hdr-title" style={{fontSize:16}}>👑 Golden Child</div><div className="hdr-sub">{(gcTeams[0].length+gcTeams[1].length)+' players · '+selTeam.club}</div></div>
+        </div>
+        <div className="screen">
+          <div className="screen-inner">
+            <div className="gc-teams">
+              {gcTeams.map((team,ti)=>{
+                const [col,bg,bdr]=TEAM_COLS[ti];
+                return (
+                  <div key={ti} className="gc-team" style={{border:'1.5px solid '+bdr}}>
+                    <div className="gc-team-hdr" style={{background:bg}}>
+                      <span className="gc-team-name" style={{color:col}}>Team {ti===0?'A':'B'}</span>
+                      <span style={{fontSize:11,color:'var(--muted)'}}>{team.length}</span>
+                    </div>
+                    <div className="gc-players">
+                      {team.map((player,pi)=>{
+                        const num=pi+1;
+                        const smallerTeamIdx = gcTeams[0].length <= gcTeams[1].length ? 0 : 1;
+                        const isExtra = ti===smallerTeamIdx && gcTeams[0].length!==gcTeams[1].length && pi===team.length-1;
+                        const extraNum = Math.max(gcTeams[0].length, gcTeams[1].length);
+                        const isLit=gcDraw&&(gcDraw.includes(num)||(isExtra&&gcDraw.includes(extraNum)));
+                        return (
+                          <div key={player.id} className="gc-prow" style={{opacity:gcDraw&&!isLit?0.3:1}}>
+                            <div className="gc-badge" style={{color:isLit?col:'var(--muted)'}}>{isExtra?(extraNum+'/'+num):''+num}</div>
+                            <div className="gc-pname" style={{color:isLit?col:'var(--text)'}}>{player.nickname||player.firstName}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{padding:'0 20px',marginBottom:20}}>
+              <button className="btn btn-gold" style={{width:'100%',height:58,fontSize:18,letterSpacing:'2px',marginBottom:32}} onClick={gcDraw_}>{gcDraw?'🔄 Draw Again':'🎲 Draw Numbers'}</button>
+              <button className="btn btn-ghost" style={{width:'100%',height:32,fontSize:11,opacity:0.5}} onClick={goGoldenChild}>🔀 reshuffle teams</button>
+            </div>
+            {gcDraw && (
+              <div className="gc-result">
+                <div className="gc-result-lbl">{gcDraw.length===gcMaxNum?'All players play!':gcDraw.length===1?'This number plays:':'These numbers play:'}</div>
+                <div className="gc-result-nums">
+                  {gcDraw.map(n=>(
+                    <div key={n} className="gc-result-num" style={{color:CHIP_COLORS[n%CHIP_COLORS.length]}}>{n}</div>
+                  ))}
+                </div>
+                <div className="gc-result-sub">Player{gcDraw.length>1?'s':''} #{gcDraw.join(' & #')} from each team step on court</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </>}
 
       {/* CREATE TEAM MODAL */}
       {showCreate && (
-        <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setShowCreate(false);}}>
+        <div className="modal-bg" onClick={e=>{ if(e.target===e.currentTarget) setShowCreate(false); }}>
           <div className="modal-sheet">
             <div className="modal-handle"/>
             <div className="modal-title">Create New Team</div>
-            <div className="form-grp"><label className="form-lbl">Club Name *</label><input className="form-input" placeholder="e.g. Collingwood All Stars" value={newTeam.club} onChange={e=>setNewTeam(t=>{return {...t,club:e.target.value};})}/>  </div>
+            <div className="form-grp"><label className="form-lbl">Club Name *</label><input className="form-input" placeholder="e.g. Collingwood All Stars" value={newTeam.club} onChange={e=>setNewTeam(t=>Object.assign({},t,{club:e.target.value}))}/></div>
             <div className="form-row">
-              <div className="form-grp"><label className="form-lbl">League</label><input className="form-input" placeholder="e.g. EDJBL" value={newTeam.league} onChange={e=>setNewTeam(t=>{return {...t,league:e.target.value};})}/>  </div>
-              <div className="form-grp"><label className="form-lbl">Age Bracket</label><input className="form-input" placeholder="e.g. U12" value={newTeam.ageBracket} onChange={e=>setNewTeam(t=>{return {...t,ageBracket:e.target.value};})}/>  </div>
+              <div className="form-grp"><label className="form-lbl">League</label><input className="form-input" placeholder="e.g. EDJBL" value={newTeam.league} onChange={e=>setNewTeam(t=>Object.assign({},t,{league:e.target.value}))}/></div>
+              <div className="form-grp"><label className="form-lbl">Age Bracket</label><input className="form-input" placeholder="e.g. U12" value={newTeam.ageBracket} onChange={e=>setNewTeam(t=>Object.assign({},t,{ageBracket:e.target.value}))}/></div>
             </div>
             <div className="form-row">
-              <div className="form-grp"><label className="form-lbl">Season</label><input className="form-input" placeholder="e.g. Summer25/26" value={newTeam.season} onChange={e=>setNewTeam(t=>{return {...t,season:e.target.value};})}/>  </div>
-              <div className="form-grp"><label className="form-lbl">Year</label><input className="form-input" placeholder="2026" value={newTeam.year} onChange={e=>setNewTeam(t=>{return {...t,year:e.target.value};})}/>  </div>
+              <div className="form-grp"><label className="form-lbl">Season</label><input className="form-input" placeholder="e.g. Summer25/26" value={newTeam.season} onChange={e=>setNewTeam(t=>Object.assign({},t,{season:e.target.value}))}/></div>
+              <div className="form-grp"><label className="form-lbl">Year</label><input className="form-input" placeholder="2026" value={newTeam.year} onChange={e=>setNewTeam(t=>Object.assign({},t,{year:e.target.value}))}/></div>
             </div>
             <div className="divider"/>
-            <label className="form-lbl" style={{marginBottom:10,display:"block"}}>Players</label>
+            <label className="form-lbl" style={{marginBottom:10,display:'block'}}>Players</label>
             {newTeam.players.length>0 && (
               <div className="players-mini">
-                {newTeam.players.map(p=>(<div key={p.id} className="mini-chip" onClick={()=>setNewTeam(t=>{return {...t,players:t.players.filter(x=>x.id!==p.id)};})} title="Tap to remove"><span className="mini-num">#{p.singletNumber}</span><span>{p.nickname}</span><span style={{color:"var(--muted)",marginLeft:2,fontSize:10}}>✕</span></div>))}
+                {newTeam.players.map(p=>(
+                  <div key={p.id} className="mini-chip" onClick={()=>setNewTeam(t=>Object.assign({},t,{players:t.players.filter(x=>x.id!==p.id)}))}>
+                    <span className="mini-num">#{p.singletNumber}</span><span>{p.nickname}</span><span style={{color:'var(--muted)',marginLeft:2,fontSize:10}}>✕</span>
+                  </div>
+                ))}
               </div>
             )}
             <div className="form-row" style={{marginBottom:10}}>
-              <div className="form-grp"><label className="form-lbl">Player Name</label><input className="form-input" placeholder="First Last" value={npName} onChange={e=>setNpName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addPlayer()}/>  </div>
-              <div className="form-grp" style={{maxWidth:88}}><label className="form-lbl">Number</label><input className="form-input" placeholder="#" value={npNum} onChange={e=>setNpNum(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addPlayer()}/>  </div>
+              <div className="form-grp"><label className="form-lbl">Player Name</label><input className="form-input" placeholder="First Last" value={npName} onChange={e=>setNpName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addPlayer()}/></div>
+              <div className="form-grp" style={{maxWidth:88}}><label className="form-lbl">Number</label><input className="form-input" placeholder="#" value={npNum} onChange={e=>setNpNum(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addPlayer()}/></div>
             </div>
-            <button className="btn btn-secondary" style={{width:"100%",marginBottom:20}} onClick={addPlayer}>+ Add Player</button>
+            <button className="btn btn-secondary" style={{width:'100%',marginBottom:20}} onClick={addPlayer}>+ Add Player</button>
             <div className="btn-row">
               <button className="btn btn-secondary" style={{flex:1}} onClick={()=>setShowCreate(false)}>Cancel</button>
               <button className="btn btn-primary" style={{flex:2}} onClick={createTeam}>Create Team</button>
@@ -827,7 +815,7 @@ function TrainingManager() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<TrainingManager/>);
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
 </script>
 </body>
 </html>
