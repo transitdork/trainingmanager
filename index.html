@@ -151,6 +151,33 @@ input[type='date']{background:none;border:none;color:var(--text);font-family:'Ba
 .mode-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;color:var(--muted);width:100%;text-align:center;padding:0 2px;}
 .mode-card.active .mode-lbl{color:var(--teal);}
 .gen-btns{display:flex;gap:10px;padding:0 20px;margin-bottom:16px;}
+/* Timer buttons */
+.timer-section{padding:0 20px;margin-bottom:20px;}
+.timer-row{display:flex;gap:8px;margin-bottom:8px;}
+.timer-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;color:var(--muted);}
+.timer-btn:hover{background:var(--surface2);color:var(--text);border-color:rgba(245,158,11,0.4);}
+.timer-btn-num{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;line-height:1;color:var(--text);}
+.timer-btn-unit{font-size:9px;letter-spacing:0.8px;text-transform:uppercase;margin-top:2px;font-weight:600;color:var(--muted);}
+/* Timer modal */
+.timer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;padding:40px 30px;}
+.timer-display{position:relative;display:flex;align-items:center;justify-content:center;width:260px;height:260px;}
+.timer-ring{position:absolute;top:0;left:0;width:100%;height:100%;transform:rotate(-90deg);}
+.timer-ring-bg{fill:none;stroke:rgba(255,255,255,0.07);stroke-width:10;}
+.timer-ring-fg{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 0.9s linear,stroke 0.5s;}
+.timer-time{font-family:'Barlow Condensed',sans-serif;font-size:72px;font-weight:900;color:#fff;line-height:1;letter-spacing:-2px;text-align:center;}
+.timer-time.last10{color:#EF4444;animation:timerPulse 1s ease-in-out infinite;}
+@keyframes timerPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.timer-label{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);text-align:center;}
+.timer-announce{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:1px;color:var(--gold);text-align:center;min-height:36px;animation:announceIn 0.3s ease;}
+.timer-done{font-size:80px!important;animation:timerPulse 0.6s ease-in-out 2;}
+@keyframes announceIn{from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);}}
+.timer-controls{display:flex;gap:14px;}
+.timer-ctrl{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.2s;}
+.timer-ctrl.play{background:linear-gradient(135deg,var(--teal-l),var(--teal-d));box-shadow:0 4px 18px var(--teal-glow);}
+.timer-ctrl.stop{background:rgba(239,68,68,0.18);border:1.5px solid rgba(239,68,68,0.4);color:#EF4444;}
+.timer-ctrl.stop:hover{background:rgba(239,68,68,0.28);}
+.timer-ctrl.restart{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);}
+.timer-ctrl.restart:hover{background:rgba(255,255,255,0.14);}
 .gen-empty{display:flex;flex-direction:column;align-items:center;padding:44px 24px;text-align:center;gap:10px;}
 .gen-empty-icon{font-size:46px;opacity:0.38;}
 .gen-empty-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--muted);}
@@ -381,6 +408,12 @@ function App() {
   const [npNum,setNpNum] = useState('');
   const [gcTeams,setGcTeams] = useState([]);
   const [gcDraw,setGcDraw] = useState(null);
+  const [timerSecs,setTimerSecs] = useState(null);   // null = no timer open
+  const [timerLeft,setTimerLeft] = useState(0);
+  const [timerRunning,setTimerRunning] = useState(false);
+  const [timerAnnounce,setTimerAnnounce] = useState('');
+  const timerRef = useRef(null);
+  const spokenRef = useRef(new Set());
   const importRef = useRef(null);
   const groupsRef = useRef(null);
 
@@ -489,6 +522,127 @@ function App() {
     const drawn=shuffle(pool).slice(0,count).sort((a,b)=>a-b);
     setGcDraw(drawn);
   }
+
+  // ── Timer & Speech ────────────────────────────────────────────────────────────
+  const TIMER_ANNOUNCEMENTS = {
+    30:  [20],
+    45:  [30,20],
+    60:  [30,20],
+    120: [60,30,20],
+    180: [120,60,30,20],
+    300: [180,120,60,30,20],
+  };
+  const TIMER_LABELS = {30:'30 Secs',45:'45 Secs',60:'1 Min',120:'2 Mins',180:'3 Mins',300:'5 Mins'};
+
+  function speak(text) {
+    if (!window.speechSynthesis) return;
+    // iOS Safari pauses synthesis after ~15s - resume it first
+    window.speechSynthesis.cancel();
+    setTimeout(() => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 0.9; u.pitch = 1.0; u.volume = 1;
+      // Voice priority: Siri (iOS) > Karen (AU) > Samantha (US) > any en-AU > any en
+      const voices = window.speechSynthesis.getVoices();
+      const pick = voices.find(v=>v.name==='Siri') ||
+                   voices.find(v=>v.name.includes('Siri')) ||
+                   voices.find(v=>v.name==='Karen') ||
+                   voices.find(v=>v.name==='Samantha') ||
+                   voices.find(v=>v.name.includes('Karen')) ||
+                   voices.find(v=>v.lang==='en-AU'&&v.localService) ||
+                   voices.find(v=>v.lang==='en-AU') ||
+                   voices.find(v=>v.lang.startsWith('en')&&v.localService) ||
+                   voices.find(v=>v.lang.startsWith('en'));
+      if (pick) u.voice = pick;
+      window.speechSynthesis.speak(u);
+    }, 50);
+  }
+
+  function fmtTime(s) {
+    const m=Math.floor(s/60), sec=s%60;
+    return m>0 ? m+':'+(sec<10?'0':'')+sec : ''+s;
+  }
+
+  function announceText(secsLeft, totalSecs) {
+    if (secsLeft===0) return 'Finish!';
+    if (secsLeft<=10) return ''+secsLeft;
+    if (secsLeft===20) return '20 seconds';
+    if (secsLeft===30) return '30 seconds';
+    if (secsLeft===60) return '1 minute';
+    if (secsLeft===120) return '2 minutes';
+    if (secsLeft===180) return '3 minutes';
+    return null;
+  }
+
+  function openTimer(secs) {
+    if (timerRef.current) clearInterval(timerRef.current);
+    spokenRef.current = new Set();
+    setTimerSecs(secs);
+    setTimerLeft(secs);
+    setTimerAnnounce('');
+    // Pre-trigger voice loading on iOS then auto-start
+    if (window.speechSynthesis) {
+      const vv = window.speechSynthesis.getVoices();
+      if (vv.length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.onvoiceschanged = null;
+          setTimerRunning(true);
+        };
+        // Fallback: start anyway after 300ms even if voices never fire
+        setTimeout(() => setTimerRunning(true), 300);
+      } else {
+        setTimerRunning(true);
+      }
+    } else {
+      setTimerRunning(true);
+    }
+  }
+
+  function closeTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setTimerSecs(null); setTimerRunning(false); setTimerAnnounce('');
+    window.speechSynthesis && window.speechSynthesis.cancel();
+  }
+
+  function restartTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    spokenRef.current = new Set();
+    setTimerLeft(timerSecs);
+    setTimerAnnounce('');
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    // Auto-restart
+    setTimeout(() => setTimerRunning(true), 100);
+  }
+
+  useEffect(()=>{
+    if (!timerRunning) { if(timerRef.current) clearInterval(timerRef.current); return; }
+    timerRef.current = setInterval(()=>{
+      setTimerLeft(prev=>{
+        const next = prev - 1;
+        const announcements = TIMER_ANNOUNCEMENTS[timerSecs] || [];
+        const shouldSpeak = (next<=10 && next>0) || announcements.includes(next) || next===0;
+        if (shouldSpeak && !spokenRef.current.has(next)) {
+          spokenRef.current.add(next);
+          const txt = announceText(next, timerSecs);
+          if (txt) {
+            speak(txt);
+            setTimerAnnounce(txt);
+            setTimeout(()=>setTimerAnnounce(a=>a===txt?'':a), 2000);
+          }
+          if (next===0) {
+            // Stop running, show Finished, auto-close after 2.5s
+            setTimeout(()=>{
+              setTimerRunning(false);
+              clearInterval(timerRef.current);
+              setTimerAnnounce('Finished!');
+            }, 100);
+            setTimeout(()=>closeTimer(), 2600);
+          }
+        }
+        return next;
+      });
+    }, 1000);
+    return ()=>clearInterval(timerRef.current);
+  }, [timerRunning, timerSecs]);
 
   const pPos=(p,team)=>{ const r=ratings&&ratings[(team&&team.id||'')+'_'+p.id]; return r ? (POSITIONS[r.position]||'—') : '—'; };
   const pOvr=(p,team)=>calcOverall(ratings&&ratings[(team&&team.id||'')+'_'+p.id]);
@@ -691,6 +845,26 @@ function App() {
               <button className="btn btn-primary" style={{width:'100%',marginBottom:10}} onClick={()=>genGroups()}>{groups.length?'🔄 Regenerate Groups':'⚡ Generate Groups'}</button>
               <button className="btn btn-gold" style={{width:'100%'}} onClick={goGoldenChild}><img src={NUMBERS_ICON} style={{width:'24px',height:'24px',objectFit:'contain',borderRadius:'5px',marginRight:'6px',verticalAlign:'middle'}}/> Numbers</button>
             </div>
+            {/* Timer buttons */}
+            <div className="timer-section">
+              <div className="sect-lbl" style={{padding:0,marginBottom:12}}>⏱ Drill Timer</div>
+              <div className="timer-row">
+                {[[30,'30','Secs'],[45,'45','Secs'],[60,'60','Secs']].map(([s,n,u])=>(
+                  <button key={s} className="timer-btn" onClick={()=>openTimer(s)}>
+                    <div className="timer-btn-num">{n}</div>
+                    <div className="timer-btn-unit">{u}</div>
+                  </button>
+                ))}
+              </div>
+              <div className="timer-row">
+                {[[120,'2','Mins'],[180,'3','Mins'],[300,'5','Mins']].map(([s,n,u])=>(
+                  <button key={s} className="timer-btn" onClick={()=>openTimer(s)}>
+                    <div className="timer-btn-num">{n}</div>
+                    <div className="timer-btn-unit">{u}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
             {groups.length===0 ? (
               <div className="gen-empty"><div className="gen-empty-icon">⚡</div><div className="gen-empty-title">Ready to generate</div><div className="gen-empty-sub">Pick type and method above,<br/>then tap Generate Groups</div></div>
             ) : <>
@@ -771,6 +945,49 @@ function App() {
           </div>
         </div>
       </>}
+
+      {/* TIMER OVERLAY */}
+      {timerSecs !== null && (()=>{
+        const total = timerSecs;
+        const left = timerLeft;
+        const pct = left / total;
+        const r = 110;
+        const circ = 2 * Math.PI * r;
+        const dash = pct * circ;
+        const isLast10 = left <= 10 && left > 0;
+        const isDone = left === 0;
+        const strokeColor = isDone ? '#22C55E' : isLast10 ? '#EF4444' : '#38BDF8';
+        return (
+          <div className="timer-overlay">
+            <div className="timer-label">{TIMER_LABELS[total]} Timer</div>
+            <div className="timer-display">
+              <svg className="timer-ring" viewBox="0 0 260 260">
+                <circle className="timer-ring-bg" cx="130" cy="130" r={r}/>
+                <circle className="timer-ring-fg"
+                  cx="130" cy="130" r={r}
+                  strokeDasharray={circ}
+                  strokeDashoffset={circ - dash}
+                  stroke={strokeColor}/>
+              </svg>
+              <div className={'timer-time'+(isLast10&&!isDone?' last10':'')+(isDone?' timer-done':'')}>
+                {isDone ? '🏁' : fmtTime(left)}
+              </div>
+            </div>
+            <div className="timer-announce">{timerAnnounce}</div>
+            <div className="timer-controls">
+              <button className="timer-ctrl restart" onClick={restartTimer} title="Restart">↺</button>
+              {isDone ? (
+                <button className="timer-ctrl play" style={{background:'linear-gradient(135deg,#4ADE80,#15803D)'}} onClick={closeTimer}>✓</button>
+              ) : (
+                <button className="timer-ctrl play" onClick={()=>setTimerRunning(r=>!r)}>
+                  {timerRunning ? '⏸' : '▶'}
+                </button>
+              )}
+              <button className="timer-ctrl stop" onClick={closeTimer} title="Close">✕</button>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* CREATE TEAM MODAL */}
       {showCreate && (
