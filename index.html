@@ -415,7 +415,8 @@ function App() {
   const timerRef = useRef(null);
   const spokenRef = useRef(new Set());
   const importRef = useRef(null);
-  const groupsRef = useRef(null);
+  const backupRef  = useRef(null);
+  const groupsRef  = useRef(null);
 
   const saveTeams = t => { setTeams(t); LS.set('tm_teams',t); };
   const saveRatings = r => { setRatings(r); LS.set('tm_ratings',r); };
@@ -445,6 +446,44 @@ function App() {
     const a=document.createElement('a'); a.href=url; a.download='squad-manager-teams-'+todayStr()+'.json'; a.click();
     URL.revokeObjectURL(url);
     toast_('✓ Exported to Squad Manager format');
+  }
+
+  function exportBackup() {
+    const data = {
+      _tmbackup: true,
+      version: 1,
+      exported: new Date().toISOString(),
+      teams,
+      ratings,
+      sessions,
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'training-manager-backup-' + todayStr() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast_('✓ Backup saved — keep this file safe!');
+  }
+
+  function onImportBackup(e) {
+    const f = e.target.files[0]; if (!f) return; e.target.value = '';
+    const fr = new FileReader();
+    fr.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data._tmbackup) throw new Error('Not a Training Manager backup');
+        if (data.teams)    saveTeams(data.teams);
+        if (data.ratings)  saveRatings(data.ratings);
+        if (data.sessions) saveSess(data.sessions);
+        const sessCount = Object.values(data.sessions || {}).reduce((acc, t) => acc + Object.keys(t).length, 0);
+        toast_('✓ Restored ' + (data.teams||[]).length + ' team(s) and ' + sessCount + ' session(s)');
+      } catch(err) {
+        toast_('⚠ Invalid backup file');
+      }
+    };
+    fr.readAsText(f);
   }
 
   function addPlayer() {
@@ -536,25 +575,35 @@ function App() {
 
   function speak(text) {
     if (!window.speechSynthesis) return;
-    // iOS Safari pauses synthesis after ~15s - resume it first
+    // Must call directly - setTimeout breaks iOS gesture chain requirement
     window.speechSynthesis.cancel();
-    setTimeout(() => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.rate = 0.9; u.pitch = 1.0; u.volume = 1;
-      // Voice priority: Siri (iOS) > Karen (AU) > Samantha (US) > any en-AU > any en
-      const voices = window.speechSynthesis.getVoices();
-      const pick = voices.find(v=>v.name==='Siri') ||
-                   voices.find(v=>v.name.includes('Siri')) ||
-                   voices.find(v=>v.name==='Karen') ||
-                   voices.find(v=>v.name==='Samantha') ||
-                   voices.find(v=>v.name.includes('Karen')) ||
-                   voices.find(v=>v.lang==='en-AU'&&v.localService) ||
-                   voices.find(v=>v.lang==='en-AU') ||
-                   voices.find(v=>v.lang.startsWith('en')&&v.localService) ||
-                   voices.find(v=>v.lang.startsWith('en'));
-      if (pick) u.voice = pick;
-      window.speechSynthesis.speak(u);
-    }, 50);
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.9; u.pitch = 1.0; u.volume = 1;
+    // Voice priority: Siri (iOS) > Karen (AU) > Samantha (US) > any en-AU > any en
+    const voices = window.speechSynthesis.getVoices();
+    const pick = voices.find(v=>v.name==='Siri') ||
+                 voices.find(v=>v.name.includes('Siri')) ||
+                 voices.find(v=>v.name==='Karen') ||
+                 voices.find(v=>v.name==='Samantha') ||
+                 voices.find(v=>v.name.includes('Karen')) ||
+                 voices.find(v=>v.lang==='en-AU'&&v.localService) ||
+                 voices.find(v=>v.lang==='en-AU') ||
+                 voices.find(v=>v.lang.startsWith('en')&&v.localService) ||
+                 voices.find(v=>v.lang.startsWith('en'));
+    if (pick) u.voice = pick;
+    window.speechSynthesis.speak(u);
+  }
+
+  // Prime speech on first user interaction - iOS requires this to unlock the audio channel
+  const speechPrimedRef = React.useRef(false);
+  function primeSpeech() {
+    if (speechPrimedRef.current || !window.speechSynthesis) return;
+    speechPrimedRef.current = true;
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    window.speechSynthesis.speak(u);
+    // Also pre-load voice list
+    window.speechSynthesis.getVoices();
   }
 
   function fmtTime(s) {
@@ -574,6 +623,7 @@ function App() {
   }
 
   function openTimer(secs) {
+    primeSpeech(); // unlock iOS audio channel on the gesture
     if (timerRef.current) clearInterval(timerRef.current);
     spokenRef.current = new Set();
     setTimerSecs(secs);
@@ -612,6 +662,19 @@ function App() {
     // Auto-restart
     setTimeout(() => setTimerRunning(true), 100);
   }
+
+  // Keep iOS speech synthesis alive - it pauses itself after ~15s
+  const iosSpeechKeepAlive = React.useRef(null);
+  useEffect(()=>{
+    if (timerRunning && window.speechSynthesis) {
+      iosSpeechKeepAlive.current = setInterval(()=>{
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      }, 5000);
+    } else {
+      if (iosSpeechKeepAlive.current) clearInterval(iosSpeechKeepAlive.current);
+    }
+    return ()=>{ if(iosSpeechKeepAlive.current) clearInterval(iosSpeechKeepAlive.current); };
+  }, [timerRunning]);
 
   useEffect(()=>{
     if (!timerRunning) { if(timerRef.current) clearInterval(timerRef.current); return; }
@@ -675,6 +738,7 @@ function App() {
     <div className="app">
       <div className="orb1"/><div className="orb2"/>
       <input type="file" accept=".json" ref={importRef} style={{display:'none'}} onChange={onImport}/>
+      <input type="file" accept=".json" ref={backupRef}  style={{display:'none'}} onChange={onImportBackup}/>
 
       {/* HOME */}
       {screen==='home' && <>
@@ -712,6 +776,19 @@ function App() {
 
             {tab==='history' && <>
               <div className="hero"><div className="hero-greeting">Track your progress</div><div className="hero-title">Attendance <span className="hero-teal">History</span></div></div>
+              <div className="action-row">
+                <button className="action-btn" onClick={exportBackup}>
+                  <span className="action-icon">💾</span>
+                  <div><div className="action-lbl">Backup</div><div className="action-sub">Save all data</div></div>
+                </button>
+                <button className="action-btn" onClick={()=>backupRef.current&&backupRef.current.click()}>
+                  <span className="action-icon">📂</span>
+                  <div><div className="action-lbl">Restore</div><div className="action-sub">From backup file</div></div>
+                </button>
+              </div>
+              <div style={{padding:'0 20px 16px',fontSize:12,color:'var(--muted)',lineHeight:1.6}}>
+                💡 Tap <strong style={{color:'var(--text)'}}>Backup</strong> before updating the app to save your history. Tap <strong style={{color:'var(--text)'}}>Restore</strong> after updating to bring it back.
+              </div>
               {teams.length===0||teams.every(t=>!teamHist(t).length) ? (
                 <div className="empty"><div className="empty-icon">📋</div><div className="empty-title">No History Yet</div><div className="empty-desc">Start a training session to begin tracking attendance.</div></div>
               ) : teams.map(team=>{
